@@ -21,8 +21,8 @@ extension CGSize {
     }
     
     func toAspectRatio() -> CGSize {
-        return CGSize(width: PlaySettings.shared.adaptiveDisplay ? mainScreenHeight : height / UIScreen.aspectRatio,
-                      height: PlaySettings.shared.adaptiveDisplay ? mainScreenWidth : height)
+        return CGSize(width: PlaySettings.shared.adaptiveDisplay ? mainScreenHeight / UIScreen.aspectRatio : height / UIScreen.aspectRatio,
+                      height: PlaySettings.shared.adaptiveDisplay ? mainScreenHeight : height)
     }
 }
 
@@ -39,15 +39,15 @@ extension CGRect {
     func toAspectRatio() -> CGRect {
         return CGRect(x: minX,
                       y : minY,
-                      width: PlaySettings.shared.adaptiveDisplay ? mainScreenHeight : height / UIScreen.aspectRatio ,
-                      height: PlaySettings.shared.adaptiveDisplay ? mainScreenWidth : height)
+                      width: PlaySettings.shared.adaptiveDisplay ? mainScreenHeight / UIScreen.aspectRatio : height / UIScreen.aspectRatio ,
+                      height: PlaySettings.shared.adaptiveDisplay ? mainScreenHeight : height)
     }
     
     func toAspectRatioReversed() -> CGRect {
         return CGRect(x: minX,
                       y : minY,
                       width: PlaySettings.shared.adaptiveDisplay ? mainScreenWidth : width ,
-                      height: PlaySettings.shared.adaptiveDisplay ? mainScreenHeight : width / UIScreen.aspectRatio)
+                      height: PlaySettings.shared.adaptiveDisplay ? mainScreenWidth / UIScreen.aspectRatio : width / UIScreen.aspectRatio)
     }
    
 }
