@@ -144,17 +144,6 @@ static int my_sysctlbyname(const char *name, void *oldp, size_t *oldlenp, void *
    return value;
  }
 
-// get and printf window size
- static int my_ioctl(int fd, unsigned long request, void *arg) {
-   int value = ioctl(fd, request, arg);
-   printf("[Lucas] ioctl (%s): %d\n", strerror(errno), value);
-   if (value == -1) {
-    // declare path
-    char path[1024];
-    printf("[Lucas] ioctl (%s): %s\n", strerror(errno), path);
-  }
-  return value;
-}
 
 
 static bool isGenshin = false;
@@ -174,7 +163,6 @@ int my_csops(pid_t pid, uint32_t ops, user_addr_t useraddr, user_size_t usersize
 }
 
 DYLD_INTERPOSE(my_csops, csops)
-DYLD_INTERPOSE(my_ioctl, ioctl)
 DYLD_INTERPOSE(my_dyld_get_active_platform, dyld_get_active_platform)
 DYLD_INTERPOSE(my_dyld_get_base_platform, dyld_get_base_platform)
 DYLD_INTERPOSE(my_uname, uname)
