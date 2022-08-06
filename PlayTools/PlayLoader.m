@@ -15,6 +15,7 @@
 #include <unistd.h>
 #import "NSObject+Swizzle.h"
 #include "sandbox.h"
+@import Darwin.POSIX.ioctl;
 
 #define SYSTEM_INFO_PATH "/System/Library/CoreServices/SystemVersion.plist"
 #define IOS_SYSTEM_INFO_PATH "/System/Library/CoreServices/iOSSystemVersion.plist"
@@ -31,12 +32,12 @@ extern void *dyld_get_base_platform(void *platform);
 
 void *my_dyld_get_base_platform(void *platform) { return 2; }
 
-// #define DEVICE_MODEL ("iPad13,8")
-#define DEVICE_MODEL ("iPad8,6")
+#define DEVICE_MODEL ("iPad13,8")
+// #define DEVICE_MODEL ("iPad8,6")
 
 // find Mac by using sysctl of HW_TARGET
-// #define OEM_ID ("J522AP")
-#define OEM_ID ("J320xAP")
+#define OEM_ID ("J522AP")
+//#define OEM_ID ("J320xAP")
 
 static int my_uname(struct utsname *uts) {
   int result = 0;
@@ -109,39 +110,52 @@ static int my_sysctlbyname(const char *name, void *oldp, size_t *oldlenp, void *
 }
 
 // Useful for debugging:
-// static int my_open(const char *path, int flags, mode_t mode) {
-//   mode = 0644;
-//   int value = open(path, flags, mode);
-//   if (value == -1) {
-//     printf("[Lucas] open (%s): %s\n", strerror(errno), path);
-//   }
+ static int my_open(const char *path, int flags, mode_t mode) {
+   mode = 0644;
+   int value = open(path, flags, mode);
+   if (value == -1) {
+     printf("[Lucas] open (%s): %s\n", strerror(errno), path);
+   }
 
-//   return value;
-// }
+   return value;
+ }
 
-// static int my_create(const char *path, mode_t mode) {
-//   int value = creat(path, mode);
-//   if (value == -1) {
-//     printf("[Lucas] create (%s): %s\n", strerror(errno), path);
-//   }
-//   return value;
-// }
+ static int my_create(const char *path, mode_t mode) {
+   int value = creat(path, mode);
+   if (value == -1) {
+     printf("[Lucas] create (%s): %s\n", strerror(errno), path);
+   }
+   return value;
+ }
 
-// static int my_mkdir(const char *path, mode_t mode) {
-//   int value = mkdir(path, mode);
-//   if (value == -1) {
-//     printf("[Lucas] mkdir (%s): %s\n", strerror(errno), path);
-//   }
-//   return value;
-// }
+ static int my_mkdir(const char *path, mode_t mode) {
+   int value = mkdir(path, mode);
+   if (value == -1) {
+     printf("[Lucas] mkdir (%s): %s\n", strerror(errno), path);
+   }
+   return value;
+ }
 
-// static int my_lstat(const char *restrict path, void *restrict buf) {
-//   int value = lstat(path, buf);
-//   if (value == -1) {
-//     printf("[Lucas] lstat (%s): %s\n", strerror(errno), path);
-//   }
-//   return value;
-// }
+ static int my_lstat(const char *restrict path, void *restrict buf) {
+   int value = lstat(path, buf);
+   if (value == -1) {
+     printf("[Lucas] lstat (%s): %s\n", strerror(errno), path);
+   }
+   return value;
+ }
+
+// get and printf window size
+ static int my_ioctl(int fd, unsigned long request, void *arg) {
+   int value = ioctl(fd, request, arg);
+   printf("[Lucas] ioctl (%s): %d\n", strerror(errno), value);
+   if (value == -1) {
+    // declare path
+    char path[1024];
+    printf("[Lucas] ioctl (%s): %s\n", strerror(errno), path);
+  }
+  return value;
+}
+
 
 static bool isGenshin = false;
 
@@ -151,6 +165,7 @@ int my_csops(pid_t pid, uint32_t ops, user_addr_t useraddr, user_size_t usersize
   if (isGenshin) {
     if (ops == CS_OPS_STATUS || ops == CS_OPS_IDENTITY) {
       printf("Hooked CSOPS %d \n", ops);
+        printf("Hooked tests");
       return 0;
     }
   }
@@ -159,21 +174,31 @@ int my_csops(pid_t pid, uint32_t ops, user_addr_t useraddr, user_size_t usersize
 }
 
 DYLD_INTERPOSE(my_csops, csops)
-
+DYLD_INTERPOSE(my_ioctl, ioctl)
 DYLD_INTERPOSE(my_dyld_get_active_platform, dyld_get_active_platform)
 DYLD_INTERPOSE(my_dyld_get_base_platform, dyld_get_base_platform)
 DYLD_INTERPOSE(my_uname, uname)
 DYLD_INTERPOSE(my_sysctlbyname, sysctlbyname)
 DYLD_INTERPOSE(my_sysctl, sysctl)
-// DYLD_INTERPOSE(my_open, open)
-// DYLD_INTERPOSE(my_mkdir, mkdir)
-// DYLD_INTERPOSE(my_create, creat)
-// DYLD_INTERPOSE(my_lstat, lstat)
+ DYLD_INTERPOSE(my_open, open)
+ DYLD_INTERPOSE(my_mkdir, mkdir)
+ DYLD_INTERPOSE(my_create, creat)
+ DYLD_INTERPOSE(my_lstat, lstat)
 
 @implementation PlayLoader
 
 static void __attribute__((constructor)) initialize(void) {
   NSString *bundleId = [[NSBundle mainBundle] bundleIdentifier];
+    printf("sas");
+  /*
+      printf("init values");
+    // print hook_frame value
+    printf("%f %f %f %f", [self hook_frame].origin.x, [self hook_frame].origin.y, [self hook_frame].size.width, [self hook_frame].size.height);
+    //print hook_bounds value
+    printf("%f %f %f %f", [self hook_bounds].origin.x, [self hook_bounds].origin.y, [self hook_bounds].size.width, [self hook_bounds].size.height);
+    //print hook_size value
+    printf("%f %f", [self hook_size].width, [self hook_size].height);
+  */
   isGenshin =
       [bundleId isEqual:@"com.miHoYo.GenshinImpact"] || [bundleId isEqual:@"com.miHoYo.Yuanshen"];
   [PlayCover launch];
