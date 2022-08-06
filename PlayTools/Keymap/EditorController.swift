@@ -39,6 +39,22 @@ final class EditorController : NSObject {
             Toast.showOver(msg: "Keymapping saved")
         } else{
             Toast.showOver(msg: "Click to start keymmaping edit")
+            // print current window frame size
+            // let frame = UIScreen.main.bounds
+            // let width = frame.size.width
+            // let height = frame.size.height
+            // let window = UIApplication.shared.keyWindow
+            // let rootView = window?.rootViewController?.view
+            // let rootFrame = rootView?.frame
+            // let rootWidth = rootFrame?.size.width
+            // let rootHeight = rootFrame?.size.height
+            // let x = (width - rootWidth!) / 2
+            // let y = (height - rootHeight!) / 2
+            // let newFrame = CGRect(x: x, y: y, width: rootWidth!, height: rootHeight!)
+            // rootView?.frame = newFrame
+            // EditorController.shared.editorMode = true
+
+            // Toast.showOver(msg: "\()")
         }
         if editorMode {
             KeymapHolder.shared.hide()
