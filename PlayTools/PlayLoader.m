@@ -15,7 +15,6 @@
 #include <unistd.h>
 #import "NSObject+Swizzle.h"
 #include "sandbox.h"
-@import Darwin.POSIX.ioctl;
 
 #define SYSTEM_INFO_PATH "/System/Library/CoreServices/SystemVersion.plist"
 #define IOS_SYSTEM_INFO_PATH "/System/Library/CoreServices/iOSSystemVersion.plist"
@@ -178,15 +177,6 @@ DYLD_INTERPOSE(my_sysctl, sysctl)
 static void __attribute__((constructor)) initialize(void) {
   NSString *bundleId = [[NSBundle mainBundle] bundleIdentifier];
     printf("sas");
-  /*
-      printf("init values");
-    // print hook_frame value
-    printf("%f %f %f %f", [self hook_frame].origin.x, [self hook_frame].origin.y, [self hook_frame].size.width, [self hook_frame].size.height);
-    //print hook_bounds value
-    printf("%f %f %f %f", [self hook_bounds].origin.x, [self hook_bounds].origin.y, [self hook_bounds].size.width, [self hook_bounds].size.height);
-    //print hook_size value
-    printf("%f %f", [self hook_size].width, [self hook_size].height);
-  */
   isGenshin =
       [bundleId isEqual:@"com.miHoYo.GenshinImpact"] || [bundleId isEqual:@"com.miHoYo.Yuanshen"];
   [PlayCover launch];
