@@ -28,6 +28,7 @@ extension CGSize {
 extension CGRect {
 
     func aspectRatio() -> CGFloat{
+        print("hades")
         if mainScreenWidth > mainScreenHeight {
             return mainScreenWidth / mainScreenHeight
         } else{
