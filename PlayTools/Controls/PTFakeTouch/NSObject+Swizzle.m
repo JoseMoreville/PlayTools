@@ -147,7 +147,7 @@
     CGRect bounds = [self hook_bounds];
     printf("bounds %f %f %f %f", bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height);
     printf("\n");
-    return CGRectMake(0, 0, 1920.0, 1080.0);
+    return CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
     //return [PlayScreen bounds:[self hook_bounds]];
 }
 
