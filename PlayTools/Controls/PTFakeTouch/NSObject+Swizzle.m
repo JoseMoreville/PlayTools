@@ -134,14 +134,22 @@
 }
 
 - (CGRect) hook_frame {
+    //return CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+    printf("frame %f %f", [self hook_frame].size.width, [self hook_frame].size.height);
     return [PlayScreen frame:[self hook_frame]];
 }
 
 - (CGRect) hook_bounds {
+    // print bounds value
+    CGRect bounds = [self hook_bounds];
+    printf("bounds %f %f %f %f", bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height);
     return [PlayScreen bounds:[self hook_bounds]];
 }
 
 - (CGSize) hook_size {
+    // print size value
+    CGSize size = [self hook_size];
+    printf("size %f %f", size.width, size.height);
     return [PlayScreen sizeAspectRatio:[self hook_size]];
 }
 
