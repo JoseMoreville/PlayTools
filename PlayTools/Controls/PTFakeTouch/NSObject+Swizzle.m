@@ -135,7 +135,11 @@
 
 - (CGRect) hook_frame {
     //return CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+    CGRect framee = [PlayScreen frame:[self hook_frame]];
     printf("frame %f %f", [self hook_frame].size.width, [self hook_frame].size.height);
+    printf("\n");
+    printf("%f",framee)
+    printf("\n");
     printf("\n");
     return [PlayScreen frame:[self hook_frame]];
 }
@@ -143,15 +147,24 @@
 - (CGRect) hook_bounds {
     // print bounds value
     CGRect bounds = [self hook_bounds];
+    CGRect PSBounds = [PlayScreen bounds:[self hook_bounds]];
     printf("bounds %f %f %f %f", bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height);
+    printf("\n");
+    printf("%f", PSBounds);
+    printf("\n");
     printf("\n");
     return [PlayScreen bounds:[self hook_bounds]];
 }
 
 - (CGSize) hook_size {
+    // MakeCGSize 1080x1920
     // print size value
     CGSize size = [self hook_size];
+    CGSize PSSize = [PlayScreen sizeAspectRatio:[self hook_size]];
     printf("size %f %f", size.width, size.height);
+    printf("\n");
+    printf("%f", PSSize);
+    printf("\n");
     printf("\n");
     return [PlayScreen sizeAspectRatio:[self hook_size]];
 }
