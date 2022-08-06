@@ -13,7 +13,7 @@ let mainScreenHeight = screen.height
 
 extension CGSize {
     func aspectRatio() -> CGFloat {
-        print("CGSize", width, height)
+        //print("CGSize", width, height)
         if mainScreenWidth > mainScreenHeight {
             return mainScreenWidth / mainScreenHeight
         } else{
@@ -29,7 +29,7 @@ extension CGSize {
 extension CGRect {
 
     func aspectRatio() -> CGFloat{
-        print("CGSize", width, height)
+        //print("CGSize", width, height)
         if mainScreenWidth > mainScreenHeight {
             return mainScreenWidth / mainScreenHeight
         } else{
