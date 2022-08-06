@@ -38,7 +38,7 @@ final class EditorController : NSObject {
         if EditorController.shared.editorMode {
             Toast.showOver(msg: "Keymapping saved")
         } else{
-            Toast.showOver(msg: "Click to start keymmaping edit")
+            //Toast.showOver(msg: "Click to start keymmaping edit")
             // print current window frame size
             // let frame = UIScreen.main.bounds
             // let width = frame.size.width
@@ -53,6 +53,8 @@ final class EditorController : NSObject {
             // let newFrame = CGRect(x: x, y: y, width: rootWidth!, height: rootHeight!)
             // rootView?.frame = newFrame
             // EditorController.shared.editorMode = true
+            // Create a toast with current window frame size
+            Toast.showOver(msg: "\(UIScreen.main.bounds)")
 
             // Toast.showOver(msg: "\()")
         }
