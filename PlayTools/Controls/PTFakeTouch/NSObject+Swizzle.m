@@ -138,8 +138,8 @@
     printf("\n");
     printf("\n");
     printf("\n");
-    return CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
-    //return [PlayScreen frame:[self hook_frame]];
+    //return CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+    return [PlayScreen frame:[self hook_frame]];
 }
 
 - (CGRect) hook_bounds {
@@ -147,8 +147,8 @@
     CGRect bounds = [self hook_bounds];
     printf("bounds %f %f %f %f", bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height);
     printf("\n");
-    return CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
-    //return [PlayScreen bounds:[self hook_bounds]];
+    //return CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+    return [PlayScreen bounds:[self hook_bounds]];
 }
 
 - (CGSize) hook_size {
@@ -157,8 +157,8 @@
     CGSize size = [self hook_size];
     printf("size %f %f", size.width, size.height);
     printf("\n");
-    return CGSizeMake(1920.0,1080.0);
-    //return [PlayScreen sizeAspectRatio:[self hook_size]];
+    //return CGSizeMake(1920.0,1080.0);
+    return [PlayScreen sizeAspectRatio:[self hook_size]];
 }
 
 bool menuWasCreated = false;
