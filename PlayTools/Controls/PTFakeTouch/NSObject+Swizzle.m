@@ -89,9 +89,9 @@
             printf("[PlayTools] App window size: %f x %f\n", [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
             // get FBSSceneSettings value
             NSString *sceneSettings = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"FBSSceneSettings"];
-            if (sceneSettings) {
-                printf("[PlayTools] FBSSceneSettings: %s\n", sceneSettings.UTF8String);
-            }
+            
+            printf("[PlayTools] FBSSceneSettings: %s\n", sceneSettings.UTF8String);
+            
             //[objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(frame) withMethod:@selector(hook_frame)];
             //[objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(bounds) withMethod:@selector(hook_bounds)];
             //[objc_getClass("FBSDisplayMode") swizzleInstanceMethod:@selector(size) withMethod:@selector(hook_size)];
