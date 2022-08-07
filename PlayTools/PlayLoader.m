@@ -31,12 +31,12 @@ extern void *dyld_get_base_platform(void *platform);
 
 void *my_dyld_get_base_platform(void *platform) { return 2; }
 
-#define DEVICE_MODEL ("iPad13,9")
-//#define DEVICE_MODEL ("iPad8,6")
+//#define DEVICE_MODEL ("iPad13,9")
+#define DEVICE_MODEL ("iPad8,6")
 
 // find Mac by using sysctl of HW_TARGET
-#define OEM_ID ("J522xAP")
-//#define OEM_ID ("J320xAP")
+//#define OEM_ID ("J522xAP")
+#define OEM_ID ("J320xAP")
 
 static int my_uname(struct utsname *uts) {
   int result = 0;

@@ -55,7 +55,11 @@ final class EditorController : NSObject {
             // EditorController.shared.editorMode = true
             // Create a toast with current window frame size
             Toast.showOver(msg: "\(UIScreen.main.bounds)")
-
+            Toast.showOver(msg: "\(PlayScreen.shared.width)")
+            Toast.showOver(msg: "\(PlayScreen.shared.height)")
+            Toast.showOver(msg: "\(PlayScreen.shared.fullscreen)")
+            Toast.showOver(msg: "\(PlayScreen.shared.percent)")
+            Toast.showOver(msg: "\(PlayScreen.shared.max)")
             // Toast.showOver(msg: "\()")
         }
         if editorMode {
