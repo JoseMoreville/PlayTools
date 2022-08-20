@@ -20,6 +20,7 @@ final public class PlayCover: NSObject {
     private override init() {}
 
     @objc static public func launch() {
+        Dynamic.loggingEnabled = true
         quitWhenClose()
         PlaySettings.shared.setupLayout()
         PlayInput.shared.initialize()
