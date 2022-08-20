@@ -49,11 +49,15 @@ extension UIScreen {
     static var aspectRatio: CGFloat {
         let count = Dynamic.NSScreen.screens.count.asInt ?? 0
         if PlaySettings.shared.notch {
+            
+            // If there's just one screen return 1.6 as aspect ratio
             if count == 1 {
-                return mainScreenWidth / mainScreenHeight // 1.6 or 1.77777778
+                return 1.6   // mainScreenWidth / mainScreenHeight // 1.6 or 1.77777778
             } else {
+                
+                // Else check if main screen (where keyboard is active) is equal to the first screen where notch is on
                 if Dynamic.NSScreen.mainScreen.asObject == Dynamic.NSScreen.screens.first {
-                    return mainScreenWidth / mainScreenHeight
+                    return 1.6 // mainScreenWidth / mainScreenHeight
                 }
             }
 
