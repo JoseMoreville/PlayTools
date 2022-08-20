@@ -60,7 +60,7 @@ extension UIScreen {
         if let frame = Dynamic(Dynamic.NSScreen.mainScreen.asObject).frame.asCGRect {
             return frame.aspectRatio()
         }
-        return mainScreenWidth / mainScreenHeight
+        return 1.6 
     }
 }
 
