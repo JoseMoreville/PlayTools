@@ -12,39 +12,41 @@ let mainScreenWidth = PlaySettings.shared.windowSizeWidth
 let mainScreenHeight = PlaySettings.shared.windowSizeHeight
 
 extension CGSize {
-    func aspectRatio() -> CGFloat {
-        if mainScreenWidth > mainScreenHeight {
-            return mainScreenWidth / mainScreenHeight
-        } else {
-            return mainScreenHeight / mainScreenWidth
+    func aspectRatio() -> CGFloat{
+        if width > height{
+            return width / height
+        } else{
+            return height / width
         }
     }
-
+    
     func toAspectRatio() -> CGSize {
-        return CGSize(width: mainScreenHeight / UIScreen.aspectRatio , height: mainScreenWidth)
+        return CGSize(width: height / UIScreen.aspectRatio, height: height)
     }
 }
 
 extension CGRect {
-
-    func aspectRatio() -> CGFloat {
-        if mainScreenWidth > mainScreenHeight {
-            return mainScreenWidth / mainScreenHeight
-        } else {
-            return mainScreenHeight / mainScreenWidth
+    
+    func aspectRatio() -> CGFloat{
+        if width > height{
+            return width / height
+        } else{
+            return height / width
         }
     }
-
+    
     func toAspectRatio() -> CGRect {
-        return CGRect(x: minX, y: minY, width: mainScreenHeight / UIScreen.aspectRatio, height: mainScreenWidth)
+        return CGRect(x: minX, y : minY, width: height / UIScreen.aspectRatio, height: height)
     }
-
+    
     func toAspectRatioReversed() -> CGRect {
-        return CGRect(x: minX, y: minY, width: mainScreenWidth, height: mainScreenHeight / UIScreen.aspectRatio)
+        return CGRect(x: minX, y : minY, width: width, height: width / UIScreen.aspectRatio)
     }
+   
 }
 
 extension UIScreen {
+    
     static var aspectRatio : CGFloat {
         let count = Dynamic.NSScreen.screens.count.asInt ?? 0
         if PlaySettings.shared.notch  {
@@ -60,7 +62,7 @@ extension UIScreen {
         if let frame = Dynamic(Dynamic.NSScreen.mainScreen.asObject).frame.asCGRect {
             return frame.aspectRatio()
         }
-        return 1.6 
+        return 1.6
     }
 }
 
