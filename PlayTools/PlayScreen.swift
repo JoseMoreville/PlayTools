@@ -12,41 +12,39 @@ let mainScreenWidth = PlaySettings.shared.windowSizeWidth
 let mainScreenHeight = PlaySettings.shared.windowSizeHeight
 
 extension CGSize {
-    func aspectRatio() -> CGFloat{
-        if width > height{
-            return width / height
-        } else{
-            return height / width
+    func aspectRatio() -> CGFloat {
+        if mainScreenWidth > mainScreenHeight {
+            return mainScreenWidth / mainScreenHeight
+        } else {
+            return mainScreenHeight / mainScreenWidth
         }
     }
-    
+
     func toAspectRatio() -> CGSize {
-        return CGSize(width: height / UIScreen.aspectRatio, height: height)
+        return CGSize(width: mainScreenHeight, height: mainScreenWidth)
     }
 }
 
 extension CGRect {
-    
-    func aspectRatio() -> CGFloat{
-        if width > height{
-            return width / height
-        } else{
-            return height / width
+
+    func aspectRatio() -> CGFloat {
+        if mainScreenWidth > mainScreenHeight {
+            return mainScreenWidth / mainScreenHeight
+        } else {
+            return mainScreenHeight / mainScreenWidth
         }
     }
-    
+
     func toAspectRatio() -> CGRect {
-        return CGRect(x: minX, y : minY, width: height / UIScreen.aspectRatio, height: height)
+        return CGRect(x: minX, y: minY, width: mainScreenHeight, height: mainScreenWidth)
     }
-    
+
     func toAspectRatioReversed() -> CGRect {
-        return CGRect(x: minX, y : minY, width: width, height: width / UIScreen.aspectRatio)
+        return CGRect(x: minX, y: minY, width: mainScreenWidth, height: mainScreenHeight)
     }
-   
 }
 
 extension UIScreen {
-    
     static var aspectRatio : CGFloat {
         let count = Dynamic.NSScreen.screens.count.asInt ?? 0
         if PlaySettings.shared.notch  {
@@ -62,7 +60,7 @@ extension UIScreen {
         if let frame = Dynamic(Dynamic.NSScreen.mainScreen.asObject).frame.asCGRect {
             return frame.aspectRatio()
         }
-        return 1.6
+        return 1.6 
     }
 }
 
