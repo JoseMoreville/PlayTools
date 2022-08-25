@@ -95,11 +95,11 @@ public final class PlayScreen: NSObject {
     }
 
     var width: CGFloat {
-        screenRect.width
+        mainScreenWidth
     }
 
     var height: CGFloat {
-        screenRect.height
+        mainScreenHeight
     }
 
     var max: CGFloat {
