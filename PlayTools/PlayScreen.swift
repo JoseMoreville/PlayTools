@@ -21,7 +21,7 @@ extension CGSize {
     }
 
     func toAspectRatio() -> CGSize {
-        return CGSize(width: mainScreenHeight, height: mainScreenWidth)
+        return CGSize(width: mainScreenHeight / UIScreen.aspectRatio , height: mainScreenWidth)
     }
 }
 
@@ -36,11 +36,11 @@ extension CGRect {
     }
 
     func toAspectRatio() -> CGRect {
-        return CGRect(x: minX, y: minY, width: mainScreenHeight, height: mainScreenWidth)
+        return CGRect(x: minX, y: minY, width: mainScreenHeight / UIScreen.aspectRatio, height: mainScreenWidth)
     }
 
     func toAspectRatioReversed() -> CGRect {
-        return CGRect(x: minX, y: minY, width: mainScreenWidth, height: mainScreenHeight)
+        return CGRect(x: minX, y: minY, width: mainScreenWidth, height: mainScreenHeight / UIScreen.aspectRatio)
     }
 }
 
