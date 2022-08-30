@@ -39,8 +39,8 @@ void *my_dyld_get_base_platform(void *platform) { return 2; }
 // #define OEM_ID ("J320xAP")
 
 // get device model from playcover .plist
-#define DEVICE_MODEL ("iPhone14,3")
-#define OEM_ID ("D64AP")
+#define DEVICE_MODEL ("iPad13,11")
+#define OEM_ID ("J523xAP")
 
 static int my_uname(struct utsname *uts) {
   int result = 0;
