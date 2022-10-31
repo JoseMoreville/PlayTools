@@ -16,16 +16,16 @@ final public class PlayCover: NSObject {
     private override init() {}
 
     @objc static public func launch() {
+        quitWhenClose()
+        AKInterface.initialize()
+        PlayInput.shared.initialize()
+        DiscordIPC.shared.initialize()
         #if targetEnvironment(macCatalyst)
         if let titlebar = PlayScreen.shared.windowScene.titlebar {
                 titlebar.titleVisibility = .hidden
                 titlebar.toolbar = nil
             }
         #endif
-        quitWhenClose()
-        AKInterface.initialize()
-        PlayInput.shared.initialize()
-        DiscordIPC.shared.initialize()
     }
 
     @objc static public func quitWhenClose() {
