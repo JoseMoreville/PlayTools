@@ -130,18 +130,6 @@ public class PlayScreen: NSObject {
     func switchDock(_ visible: Bool) {
         AKInterface.shared!.setMenuBarVisible(visible)
     }
-    
-    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        
-        guard let windowScene = (scene as? UIWindowScene) else { return }
-        
-        #if targetEnvironment(macCatalyst)
-        if let titlebar = windowScene.titlebar {
-            titlebar.titleVisibility = .hidden
-            titlebar.toolbar = nil
-        }
-        #endif
-    }
 
 }
 

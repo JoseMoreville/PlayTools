@@ -16,6 +16,12 @@ final public class PlayCover: NSObject {
     private override init() {}
 
     @objc static public func launch() {
+        #if targetEnvironment(macCatalyst)
+        if let titlebar = PlayScreen.shared.windowScene.titlebar {
+                titlebar.titleVisibility = .hidden
+                titlebar.toolbar = nil
+            }
+        #endif
         quitWhenClose()
         AKInterface.initialize()
         PlayInput.shared.initialize()
