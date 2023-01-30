@@ -20,11 +20,7 @@ extension CGSize {
     }
 
     func toAspectRatio() -> CGSize {
-        if #available(iOS 16.3, *) {
-            return CGSize(width: mainScreenWidth, height: mainScreenHeight)
-        } else {
-            return CGSize(width: mainScreenHeight, height: mainScreenWidth)
-        }
+        return CGSize(width: mainScreenHeight, height: mainScreenWidth)
     }
 }
 
@@ -37,12 +33,8 @@ extension CGRect {
         }
     }
 
-    func toAspectRatio() -> CGRect {
-        return CGRect(x: minX, y: minY, width: mainScreenWidth, height: mainScreenHeight)
-    }
-
-    func toAspectRatioReversed() -> CGRect {
-        return CGRect(x: minX, y: minY, width: mainScreenHeight, height: mainScreenWidth)
+    func toAspectRatio(_ multiplier: CGFloat = 1) -> CGRect {
+        return CGRect(x: minX, y: minY, width: mainScreenWidth * multiplier, height: mainScreenHeight * multiplier)
     }
 }
 
@@ -69,11 +61,11 @@ public class PlayScreen: NSObject {
     @objc public static let shared = PlayScreen()
 
     @objc public static func frame(_ rect: CGRect) -> CGRect {
-        return rect.toAspectRatioReversed()
+        return rect.toAspectRatio()
     }
 
-    @objc public static func bounds(_ rect: CGRect) -> CGRect {
-        return rect.toAspectRatio()
+    @objc public static func nativeBounds(_ rect: CGRect) -> CGRect {
+        return rect.toAspectRatio(2)
     }
 
     @objc public static func width(_ size: Int) -> Int {

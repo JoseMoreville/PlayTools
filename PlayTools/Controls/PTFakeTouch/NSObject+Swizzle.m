@@ -65,6 +65,32 @@ __attribute__((visibility("hidden")))
     return [PlayScreen sizeAspectRatio:[self hook_size]];
 }
 
+
+- (long long) hook_orientation {
+    return 0;
+}
+
+- (CGRect) hook_frame2 {
+    return [PlayScreen frame:[self hook_frame]];
+}
+
+- (CGRect) hook_bounds2 {
+    return [PlayScreen frame:[self hook_bounds]];
+}
+
+- (CGRect) hook_nativeBounds {
+    return [PlayScreen nativeBounds:[self hook_nativeBounds]];
+}
+
+- (double) hook_nativeScale {
+    return 2.0;
+}
+
+- (double) hook_scale {
+    return 2.0;
+}
+
+
 bool menuWasCreated = false;
 - (id) initWithRootMenuHook:(id)rootMenu {
     self = [self initWithRootMenuHook:rootMenu];
