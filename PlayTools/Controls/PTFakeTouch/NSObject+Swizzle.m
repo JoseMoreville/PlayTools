@@ -80,7 +80,7 @@ __attribute__((visibility("hidden")))
 //
 //- (CGRect) hook_nativeBounds {
 //    return [PlayScreen nativeBounds:[self hook_nativeBounds]];
-}
+//}
 
 - (double) hook_nativeScale {
     return 2.0;
