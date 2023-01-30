@@ -145,17 +145,17 @@ bool menuWasCreated = false;
         [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(scale) withMethod:@selector(hook_scale)];
     }
     else{
-        CGFloat newValueW = (CGFloat) [self get_default_width];
-        [[PlaySettings shared] setValue:@(newValueW) forKey:@"windowSizeWidth"];
-        
-        CGFloat newValueH = (CGFloat)[self get_default_height];
-        [[PlaySettings shared] setValue:@(newValueH) forKey:@"windowSizeHeight"];
+//        CGFloat newValueW = (CGFloat) [self get_default_width];
+//        [[PlaySettings shared] setValue:@(newValueW) forKey:@"windowSizeWidth"];
+//        
+//        CGFloat newValueH = (CGFloat)[self get_default_height];
+//        [[PlaySettings shared] setValue:@(newValueH) forKey:@"windowSizeHeight"];
 
         //[objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(frame) withMethod:@selector(hook_frame)];
         //[objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(bounds) withMethod:@selector(hook_bounds)];
         //[objc_getClass("FBSDisplayMode") swizzleInstanceMethod:@selector(size) withMethod:@selector(hook_size)];
         
-        [objc_getClass("UIDevice") swizzleInstanceMethod:@selector(orientation) withMethod:@selector(hook_orientation)];
+        //[objc_getClass("UIDevice") swizzleInstanceMethod:@selector(orientation) withMethod:@selector(hook_orientation)];
         // [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(nativeBounds) withMethod:@selector(hook_nativeBounds)];
         // [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(nativeScale) withMethod:@selector(hook_nativeScale)];
         //[objc_getClass("UIScreen") swizzleInstanceMethod:@selector(scale) withMethod:@selector(hook_scale)];
