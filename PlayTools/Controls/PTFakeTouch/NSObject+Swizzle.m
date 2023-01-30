@@ -71,7 +71,7 @@ __attribute__((visibility("hidden")))
 
 
 - (long long) hook_orientation {
-    return 1;
+    return 4;
 }
 
 - (double) hook_nativeScale {
