@@ -68,6 +68,9 @@ public class PlayScreen: NSObject {
         return rect.toAspectRatio(2)
     }
 
+    @objc public static func bounds(_ rect: CGRect) -> CGRect {
+            return rect.toAspectRatio()
+        }
     @objc public static func width(_ size: Int) -> Int {
         return size
     }
