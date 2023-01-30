@@ -71,11 +71,11 @@ __attribute__((visibility("hidden")))
 }
 
 - (CGRect) hook_frame2 {
-    return [PlayScreen frame:[self hook_frame]];
+    return [PlayScreen frame2:[self hook_frame]];
 }
 
 - (CGRect) hook_bounds2 {
-    return [PlayScreen frame:[self hook_bounds]];
+    return [PlayScreen frame2:[self hook_bounds]];
 }
 
 - (CGRect) hook_nativeBounds {
