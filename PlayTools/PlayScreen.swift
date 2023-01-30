@@ -26,7 +26,7 @@ extension CGSize {
             return CGSize(width: mainScreenHeight, height: mainScreenWidth)
         }
     }
-    func toAspectRatio2() -> CGSize {
+    func toAspectRatioInternal() -> CGSize {
             return CGSize(width: mainScreenHeight, height: mainScreenWidth)
     }
 }
@@ -47,7 +47,7 @@ extension CGRect {
     func toAspectRatioReversed() -> CGRect {
         return CGRect(x: minX, y: minY, width: mainScreenHeight, height: mainScreenWidth)
     }
-    func toAspectRatio2(_ multiplier: CGFloat = 1) -> CGRect {
+    func toAspectRatioInternal(_ multiplier: CGFloat = 1) -> CGRect {
             return CGRect(x: minX, y: minY, width: mainScreenWidth * multiplier, height: mainScreenHeight * multiplier)
     }
 }
@@ -77,15 +77,15 @@ public class PlayScreen: NSObject {
     @objc public static func frame(_ rect: CGRect) -> CGRect {
         return rect.toAspectRatioReversed()
     }
-    @objc public static func frame2(_ rect: CGRect) -> CGRect {
-        return rect.toAspectRatio2()
+    @objc public static func frameInternal(_ rect: CGRect) -> CGRect {
+        return rect.toAspectRatioInternal()
     }
 
     @objc public static func bounds(_ rect: CGRect) -> CGRect {
         return rect.toAspectRatio()
     }
     @objc public static func nativeBounds(_ rect: CGRect) -> CGRect {
-            return rect.toAspectRatio2(2)
+            return rect.toAspectRatioInternal(2)
     }
 
     @objc public static func width(_ size: Int) -> Int {
