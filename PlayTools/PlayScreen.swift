@@ -20,8 +20,12 @@ extension CGSize {
     }
 
     func toAspectRatio() -> CGSize {
-        return CGSize(width: mainScreenHeight, height: mainScreenWidth)
-    }
+            if #available(iOS 16.3, *) {
+                return CGSize(width: mainScreenWidth, height: mainScreenHeight)
+            } else {
+                return CGSize(width: mainScreenHeight, height: mainScreenWidth)
+            }
+        }
 }
 
 extension CGRect {
@@ -69,6 +73,7 @@ public class PlayScreen: NSObject {
     @objc public static func frame(_ rect: CGRect) -> CGRect {
         return rect.toAspectRatioReversed()
     }
+    // metodos ui kit
     @objc public static func frame2(_ rect: CGRect) -> CGRect {
         return rect.toAspectRatio()
     }
