@@ -70,16 +70,16 @@ __attribute__((visibility("hidden")))
     return 0;
 }
 
-- (CGRect) hook_frame2 {
-    return [PlayScreen frame2:[self hook_frame]];
-}
-
-- (CGRect) hook_bounds2 {
-    return [PlayScreen frame2:[self hook_bounds]];
-}
-
-- (CGRect) hook_nativeBounds {
-    return [PlayScreen nativeBounds:[self hook_nativeBounds]];
+//- (CGRect) hook_frame2 {
+//    return [PlayScreen frame2:[self hook_frame]];
+//}
+//
+//- (CGRect) hook_bounds2 {
+//    return [PlayScreen frame2:[self hook_bounds]];
+//}
+//
+//- (CGRect) hook_nativeBounds {
+//    return [PlayScreen nativeBounds:[self hook_nativeBounds]];
 }
 
 - (double) hook_nativeScale {

@@ -20,12 +20,12 @@ extension CGSize {
     }
 
     func toAspectRatio() -> CGSize {
-            if #available(iOS 16.3, *) {
-                return CGSize(width: mainScreenWidth, height: mainScreenHeight)
-            } else {
-                return CGSize(width: mainScreenHeight, height: mainScreenWidth)
-            }
+        if #available(iOS 16.3, *) {
+            return CGSize(width: mainScreenWidth, height: mainScreenHeight)
+        } else {
+            return CGSize(width: mainScreenHeight, height: mainScreenWidth)
         }
+    }
 }
 
 extension CGRect {
@@ -37,15 +37,13 @@ extension CGRect {
         }
     }
 
-    func toAspectRatio(_ multiplier: CGFloat = 1) -> CGRect {
-        return CGRect(x: minX, y: minY, width: mainScreenWidth * multiplier, height: mainScreenHeight * multiplier)
+    func toAspectRatio() -> CGRect {
+        return CGRect(x: minX, y: minY, width: mainScreenWidth, height: mainScreenHeight)
     }
+
     func toAspectRatioReversed() -> CGRect {
-            return CGRect(x: minX, y: minY, width: mainScreenHeight, height: mainScreenWidth)
-        }
-    func toAspectRatio2() -> CGRect {
-            return CGRect(x: minX, y: minY, width: mainScreenWidth, height: mainScreenHeight)
-        }
+        return CGRect(x: minX, y: minY, width: mainScreenHeight, height: mainScreenWidth)
+    }
 }
 
 extension UIScreen {
@@ -73,18 +71,11 @@ public class PlayScreen: NSObject {
     @objc public static func frame(_ rect: CGRect) -> CGRect {
         return rect.toAspectRatioReversed()
     }
-    // metodos ui kit
-    @objc public static func frame2(_ rect: CGRect) -> CGRect {
+
+    @objc public static func bounds(_ rect: CGRect) -> CGRect {
         return rect.toAspectRatio()
     }
 
-    @objc public static func nativeBounds(_ rect: CGRect) -> CGRect {
-        return rect.toAspectRatio(2)
-    }
-
-    @objc public static func bounds(_ rect: CGRect) -> CGRect {
-            return rect.toAspectRatio2()
-        }
     @objc public static func width(_ size: Int) -> Int {
         return size
     }
