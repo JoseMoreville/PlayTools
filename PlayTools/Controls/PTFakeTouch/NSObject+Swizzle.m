@@ -61,6 +61,14 @@ __attribute__((visibility("hidden")))
     return [PlayScreen bounds:[self hook_bounds]];
 }
 
+- (CGRect) hook_bounds2 {
+    return [PlayScreen frame2:[self hook_bounds2]];
+}
+
+- (CGRect) hook_nativeBounds {
+    return [PlayScreen nativeBounds:[self hook_nativeBounds]];
+}
+
 - (CGSize) hook_size {
     return [PlayScreen sizeAspectRatio:[self hook_size]];
 }
@@ -69,18 +77,6 @@ __attribute__((visibility("hidden")))
 - (long long) hook_orientation {
     return 0;
 }
-
-//- (CGRect) hook_frame2 {
-//    return [PlayScreen frame2:[self hook_frame]];
-//}
-//
-//- (CGRect) hook_bounds2 {
-//    return [PlayScreen frame2:[self hook_bounds]];
-//}
-//
-//- (CGRect) hook_nativeBounds {
-//    return [PlayScreen nativeBounds:[self hook_nativeBounds]];
-//}
 
 - (double) hook_nativeScale {
     return 2.0;
