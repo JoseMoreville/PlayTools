@@ -57,6 +57,10 @@ __attribute__((visibility("hidden")))
     return [PlayScreen frame:[self hook_frame]];
 }
 
+- (CGRect) hook_frame2 {
+    return [PlayScreen frame2:[self hook_frame]];
+}
+
 - (CGRect) hook_bounds {
     return [PlayScreen bounds:[self hook_bounds]];
 }
@@ -138,7 +142,7 @@ bool menuWasCreated = false;
 + (void)load {
     if ([[PlaySettings shared] adaptiveDisplay]) {
         // This lines set External Scene settings and other IOS10 Runtime services by swizzling
-        [objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(frame) withMethod:@selector(hook_frame)];
+        [objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(frame) withMethod:@selector(hook_frame2)];
         [objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(bounds) withMethod:@selector(hook_bounds)];
         [objc_getClass("FBSDisplayMode") swizzleInstanceMethod:@selector(size) withMethod:@selector(hook_size)];
 
