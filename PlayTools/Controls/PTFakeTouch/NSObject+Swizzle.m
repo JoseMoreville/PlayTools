@@ -79,7 +79,7 @@ __attribute__((visibility("hidden")))
 }
 
 - (double) hook_scale {
-    return 2.0;
+    return 1.0;
 }
 
 - (double) get_default_height {
