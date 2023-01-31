@@ -167,8 +167,8 @@ bool menuWasCreated = false;
         [objc_getClass("UIDevice") swizzleInstanceMethod:@selector(orientation) withMethod:@selector(hook_orientation)];
         [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(nativeBounds) withMethod:@selector(hook_nativeBounds)];
         ///
-        [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(bounds) withMethod:@selector(hook_bounds)];
-        [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(applicationFrame) withMethod:@selector(hook_frame2)];
+        //[objc_getClass("UIScreen") swizzleInstanceMethod:@selector(bounds) withMethod:@selector(hook_bounds)];
+        //[objc_getClass("UIScreen") swizzleInstanceMethod:@selector(applicationFrame) withMethod:@selector(hook_frame2)];
         ///
         [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(nativeScale) withMethod:@selector(hook_nativeScale)];
         [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(scale) withMethod:@selector(hook_scale)];
