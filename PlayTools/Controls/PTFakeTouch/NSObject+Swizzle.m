@@ -79,11 +79,11 @@ __attribute__((visibility("hidden")))
 }
 
 - (double) hook_nativeScale {
-    return 1.0;
+    return 2.0;
 }
 
 - (double) hook_scale {
-    return 1.0;
+    return 2.0;
 }
 
 - (double) get_default_height {
@@ -142,7 +142,7 @@ bool menuWasCreated = false;
 + (void)load {
     if ([[PlaySettings shared] adaptiveDisplay]) {
         // This lines set External Scene settings and other IOS10 Runtime services by swizzling
-        [objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(frame) withMethod:@selector(hook_frame2)];
+        [objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(frame) withMethod:@selector(hook_frame)];
         [objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(bounds) withMethod:@selector(hook_bounds)];
         [objc_getClass("FBSDisplayMode") swizzleInstanceMethod:@selector(size) withMethod:@selector(hook_size)];
 
@@ -160,7 +160,7 @@ bool menuWasCreated = false;
         CGFloat newValueH = (CGFloat)[self get_default_height];
         [[PlaySettings shared] setValue:@(newValueH) forKey:@"windowSizeHeight"];
 
-        [objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(frame) withMethod:@selector(hook_frame)];
+        [objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(frame) withMethod:@selector(hook_frame2)];
         [objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(bounds) withMethod:@selector(hook_bounds)];
         [objc_getClass("FBSDisplayMode") swizzleInstanceMethod:@selector(size) withMethod:@selector(hook_size)];
         
@@ -168,7 +168,7 @@ bool menuWasCreated = false;
         [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(nativeBounds) withMethod:@selector(hook_nativeBounds)];
         ///
         [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(bounds) withMethod:@selector(hook_bounds)];
-        [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(applicationFrame) withMethod:@selector(hook_frame)];
+        [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(applicationFrame) withMethod:@selector(hook_frame2)];
         ///
         [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(nativeScale) withMethod:@selector(hook_nativeScale)];
         [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(scale) withMethod:@selector(hook_scale)];
