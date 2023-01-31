@@ -75,11 +75,11 @@ __attribute__((visibility("hidden")))
 }
 
 - (double) hook_nativeScale {
-    return 1.0;
+    return 3.0;
 }
 
 - (double) hook_scale {
-    return 1.0;
+    return 3.0;
 }
 
 - (double) get_default_height {
