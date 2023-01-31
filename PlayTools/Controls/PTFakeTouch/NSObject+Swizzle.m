@@ -90,8 +90,12 @@ __attribute__((visibility("hidden")))
     return [[UIScreen mainScreen] bounds].size.width;
     
 }
-
-
+- (CGRect) hook_boundsInternal {
+    return [PlayScreen frameInternal:[self hook_boundsInternal]];
+}
+- (CGRect) hook_frameInternal {
+    return [PlayScreen frameInternal:[self hook_frameInternal]];
+}
 
 bool menuWasCreated = false;
 - (id) initWithRootMenuHook:(id)rootMenu {
@@ -152,11 +156,15 @@ bool menuWasCreated = false;
         [[PlaySettings shared] setValue:@(newValueH) forKey:@"windowSizeHeight"];
 
         [objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(frame) withMethod:@selector(hook_frame)];
-        [objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(bounds) withMethod:@selector(hook_bounds)];
-        [objc_getClass("FBSDisplayMode") swizzleInstanceMethod:@selector(size) withMethod:@selector(hook_size)];
+        // [objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(bounds) withMethod:@selector(hook_bounds)];
+        //[objc_getClass("FBSDisplayMode") swizzleInstanceMethod:@selector(size) withMethod:@selector(hook_size)];
         
         [objc_getClass("UIDevice") swizzleInstanceMethod:@selector(orientation) withMethod:@selector(hook_orientation)];
         [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(nativeBounds) withMethod:@selector(hook_nativeBounds)];
+        ///
+        [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(bounds) withMethod:@selector(hook_boundsInternal)];
+        [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(applicationFrame) withMethod:@selector(hook_frameInternal)];
+        ///
         [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(nativeScale) withMethod:@selector(hook_nativeScale)];
         [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(scale) withMethod:@selector(hook_scale)];
     }

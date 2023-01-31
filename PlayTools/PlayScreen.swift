@@ -95,6 +95,9 @@ public class PlayScreen: NSObject {
     @objc public static func sizeAspectRatio(_ size: CGSize) -> CGSize {
         return size.toAspectRatio()
     }
+    @objc public static func frameInternal(_ rect: CGRect) -> CGRect {
+            return rect.toAspectRatio()
+    }
 
     var fullscreen: Bool {
         return AKInterface.shared!.isFullscreen
