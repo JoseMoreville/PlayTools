@@ -79,11 +79,11 @@ __attribute__((visibility("hidden")))
 }
 
 - (double) hook_nativeScale {
-    return 3.0;
+    return 1.0;
 }
 
 - (double) hook_scale {
-    return 3.0;
+    return 1.0;
 }
 
 - (double) get_default_height {
@@ -148,7 +148,7 @@ bool menuWasCreated = false;
 
         // Fixes Apple mess at MacOS 13.2
         [objc_getClass("UIDevice") swizzleInstanceMethod:@selector(orientation) withMethod:@selector(hook_orientation)];
-        [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(nativeBounds) withMethod:@selector(hook_nativeBounds)];
+        [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(nativeBounds) withMethod:@selector(bounds)];
         [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(nativeScale) withMethod:@selector(hook_nativeScale)];
         
         [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(scale) withMethod:@selector(hook_scale)];
