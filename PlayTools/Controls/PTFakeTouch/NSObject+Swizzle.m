@@ -71,7 +71,7 @@ __attribute__((visibility("hidden")))
 
 
 - (long long) hook_orientation {
-    return 0;
+    return 3;
 }
 
 - (double) hook_nativeScale {
@@ -83,11 +83,11 @@ __attribute__((visibility("hidden")))
 }
 
 - (double) get_default_height {
-    return 1080; //[[UIScreen mainScreen] bounds].size.height;
+    return 1920; //[[UIScreen mainScreen] bounds].size.height;
     
 }
 - (double) get_default_width {
-    return 1920; //[[UIScreen mainScreen] bounds].size.width;
+    return 1080; //[[UIScreen mainScreen] bounds].size.width;
     
 }
 - (CGRect) hook_boundsInternal {
