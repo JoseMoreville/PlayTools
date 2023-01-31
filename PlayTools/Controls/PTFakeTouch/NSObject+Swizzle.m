@@ -75,7 +75,7 @@ __attribute__((visibility("hidden")))
 }
 
 - (double) hook_nativeScale {
-    return 2.0;
+    return 1.0;
 }
 
 - (double) hook_scale {
