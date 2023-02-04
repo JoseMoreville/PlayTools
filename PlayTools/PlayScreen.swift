@@ -23,7 +23,8 @@ extension CGSize {
         if #available(iOS 16.3, *) {
             return CGSize(width: mainScreenWidth, height: mainScreenHeight)
         } else {
-            return CGSize(width: mainScreenHeight, height: mainScreenWidth)
+            return CGSize(width: mainScreenWidth, height: mainScreenHeight)
+            //return CGSize(width: mainScreenHeight, height: mainScreenWidth)
         }
     }
 
