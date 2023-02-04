@@ -54,19 +54,19 @@ __attribute__((visibility("hidden")))
 }
 
 - (CGRect) hook_frameDefault {
-    return [PlayScreen frame:[self hook_frameDefault]];
+    return [PlayScreen frameDefault:[self hook_frameDefault]];
 }
 
 - (CGRect) hook_boundsDefault {
-    return [PlayScreen bounds:[self hook_boundsDefault]];
+    return [PlayScreen boundsDefault:[self hook_boundsDefault]];
 }
 
 - (CGRect) hook_nativeBoundsDefault {
-    return [PlayScreen nativeBounds:[self hook_nativeBoundsDefault]];
+    return [PlayScreen nativeBoundsDefault:[self hook_nativeBoundsDefault]];
 }
 
 - (CGSize) hook_sizeDelfault {
-    return [PlayScreen sizeAspectRatio:[self hook_sizeDelfault]];
+    return [PlayScreen sizeAspectRatioDefault:[self hook_sizeDelfault]];
 }
 
 

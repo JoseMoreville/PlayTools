@@ -164,7 +164,7 @@ public class PlayScreen: NSObject {
         AKInterface.shared!.setMenuBarVisible(visible)
     }
 
-    
+    // Default calculation
     @objc public static func frameReversedDefault(_ rect: CGRect) -> CGRect {
         return rect.toAspectRatioReversedDefault()
     }
@@ -179,10 +179,10 @@ public class PlayScreen: NSObject {
             return rect.toAspectRatioDefault(2)
     }
 
-    @objc public static func sizeAspectRatio(_ size: CGSize) -> CGSize {
+    @objc public static func sizeAspectRatioDefault(_ size: CGSize) -> CGSize {
         return size.toAspectRatioDefault()
     }
-    @objc public static func frameInternal(_ rect: CGRect) -> CGRect {
+    @objc public static func frameInternalDefault(_ rect: CGRect) -> CGRect {
             return rect.toAspectRatioDefault()
     }
     
