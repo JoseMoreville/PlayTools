@@ -72,10 +72,10 @@ extension UIScreen {
 public class PlayScreen: NSObject {
     @objc public static let shared = PlayScreen()
 
-    @objc public static func frame(_ rect: CGRect) -> CGRect {
+    @objc public static func frameReversed(_ rect: CGRect) -> CGRect {
         return rect.toAspectRatioReversed()
     }
-    @objc public static func frame2(_ rect: CGRect) -> CGRect {
+    @objc public static func frame(_ rect: CGRect) -> CGRect {
         return rect.toAspectRatio()
     }
     @objc public static func bounds(_ rect: CGRect) -> CGRect {
