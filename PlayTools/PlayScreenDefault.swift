@@ -149,29 +149,3 @@ public class PlayScreenDefault: NSObject {
     }
 
 }
-
-extension CGFloat {
-    var relativeYDefault: CGFloat {
-        self / screenDefault.height
-    }
-
-    var relativeXDefault: CGFloat {
-        self / screenDefault.width
-    }
-
-    var relativeSizeDefault: CGFloat {
-        self / screenDefault.percent
-    }
-
-    var absoluteSizeDefault: CGFloat {
-        self * screenDefault.percent
-    }
-
-    var absoluteXDefault: CGFloat {
-        self * screenDefault.width
-    }
-
-    var absoluteYDefault: CGFloat {
-        self * screenDefault.height
-    }
-}

@@ -108,13 +108,6 @@ __attribute__((visibility("hidden")))
     return [[UIScreen mainScreen] bounds].size.width;
     
 }
-//- (CGRect) hook_boundsInternal {
-//    return [PlayScreen frame:[self hook_boundsInternal]];
-//}
-//
-//- (CGRect) hook_frameInternal {
-//    return [PlayScreen frame:[self hook_frameInternal]];
-//}
 
 bool menuWasCreated = false;
 - (id) initWithRootMenuHook:(id)rootMenu {
