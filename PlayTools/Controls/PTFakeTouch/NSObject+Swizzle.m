@@ -87,11 +87,11 @@ __attribute__((visibility("hidden")))
 }
 
 - (double) get_default_height {
-    return 1080; //[[UIScreen mainScreen] bounds].size.height;
+    return [[UIScreen mainScreen] bounds].size.height;
     
 }
 - (double) get_default_width {
-    return 1920; //[[UIScreen mainScreen] bounds].size.width;
+    return [[UIScreen mainScreen] bounds].size.width;
     
 }
 - (CGRect) hook_boundsInternal {

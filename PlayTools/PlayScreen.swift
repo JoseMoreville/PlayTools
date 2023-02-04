@@ -21,14 +21,16 @@ extension CGSize {
 
     func toAspectRatio() -> CGSize {
         if #available(iOS 16.3, *) {
-            return CGSize(width: mainScreenWidth, height: mainScreenHeight)
+            return CGSize(width: mainScreenHeight, height: mainScreenWidth)
         } else {
+            //return CGSize(width: mainScreenWidth, height: mainScreenHeight)
             return CGSize(width: mainScreenHeight, height: mainScreenWidth)
         }
     }
 
     func toAspectRatioInternal() -> CGSize {
-        return CGSize(width: mainScreenHeight, height: mainScreenWidth)
+        //return CGSize(width: mainScreenHeight, height: mainScreenWidth)
+        return CGSize(width: mainScreenWidth, height: mainScreenHeight)
     }
 }
 
@@ -47,6 +49,7 @@ extension CGRect {
 
     func toAspectRatioReversed() -> CGRect {
         return CGRect(x: minX, y: minY, width: mainScreenHeight, height: mainScreenWidth)
+        // return CGRect(x: minX, y: minY, width: mainScreenWidth, height: mainScreenHeight)
     }
 }
 
