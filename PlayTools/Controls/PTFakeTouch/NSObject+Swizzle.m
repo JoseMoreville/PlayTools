@@ -53,32 +53,16 @@ __attribute__((visibility("hidden")))
     return false;
 }
 
-- (CGRect) hook_frameReversed {
-    return [PlayScreen frameReversed:[self hook_frameReversed]];
-}
-
 - (CGRect) hook_frameDefault {
     return [PlayScreenDefault frame:[self hook_frameDefault]];
-}
-
-- (CGRect) hook_bounds {
-    return [PlayScreen bounds:[self hook_bounds]];
 }
 
 - (CGRect) hook_boundsDefault {
     return [PlayScreenDefault bounds:[self hook_boundsDefault]];
 }
 
-- (CGRect) hook_nativeBounds {
-    return [PlayScreen nativeBounds:[self hook_nativeBounds]];
-}
-
 - (CGRect) hook_nativeBoundsDefault {
     return [PlayScreenDefault nativeBounds:[self hook_nativeBoundsDefault]];
-}
-
-- (CGSize) hook_size {
-    return [PlayScreen sizeAspectRatio:[self hook_size]];
 }
 
 - (CGSize) hook_sizeDelfault {
@@ -86,8 +70,26 @@ __attribute__((visibility("hidden")))
 }
 
 
+- (CGRect) hook_frame {
+    return [PlayScreen frame:[self hook_frame]];
+}
+
+- (CGRect) hook_bounds {
+    return [PlayScreen bounds:[self hook_bounds]];
+}
+
+- (CGRect) hook_nativeBounds {
+    return [PlayScreen nativeBounds:[self hook_nativeBounds]];
+}
+
+- (CGSize) hook_size {
+    return [PlayScreen sizeAspectRatio:[self hook_size]];
+}
+
+
+
 - (long long) hook_orientation {
-    return 3;
+    return 0;
 }
 
 - (double) hook_nativeScale {
@@ -155,7 +157,7 @@ bool menuWasCreated = false;
 + (void)load {
     if ([[PlaySettings shared] adaptiveDisplay]) {
         // This lines set External Scene settings and other IOS10 Runtime services by swizzling
-        [objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(frame) withMethod:@selector(hook_frameReversed)];
+        [objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(frame) withMethod:@selector(hook_frame)];
         [objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(bounds) withMethod:@selector(hook_bounds)];
         [objc_getClass("FBSDisplayMode") swizzleInstanceMethod:@selector(size) withMethod:@selector(hook_size)];
 
