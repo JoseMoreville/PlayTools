@@ -48,8 +48,8 @@ extension CGRect {
     }
 
     func toAspectRatioReversed() -> CGRect {
-        // return CGRect(x: minX, y: minY, width: mainScreenHeight, height: mainScreenWidth)
-        return CGRect(x: minX, y: minY, width: mainScreenWidth, height: mainScreenHeight)
+        return CGRect(x: minX, y: minY, width: mainScreenHeight, height: mainScreenWidth)
+        // return CGRect(x: minX, y: minY, width: mainScreenWidth, height: mainScreenHeight)
     }
 }
 
