@@ -36,6 +36,8 @@ let settings = PlaySettings.shared
     @objc lazy var windowSizeHeight = CGFloat(settingsData.windowHeight)
 
     @objc lazy var windowSizeWidth = CGFloat(settingsData.windowWidth)
+    
+    @objc lazy var inverseScreenValues = settingsData.inverseScreenValues
 
     @objc lazy var inverseScreenValues = settingsData.inverseScreenValues
 
