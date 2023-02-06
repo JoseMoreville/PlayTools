@@ -108,10 +108,6 @@ public class PlayScreen: NSObject {
         return size.toAspectRatio()
     }
     
-    @objc public static func isRecentMacOS() -> Bool {
-        return macOSVersion >= 13.2
-    }
-
     var fullscreen: Bool {
         return AKInterface.shared!.isFullscreen
     }
