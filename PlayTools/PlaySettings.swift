@@ -36,13 +36,13 @@ let settings = PlaySettings.shared
     @objc lazy var windowSizeHeight = CGFloat(settingsData.windowHeight)
 
     @objc lazy var windowSizeWidth = CGFloat(settingsData.windowWidth)
-    
+
     @objc lazy var inverseScreenValues = settingsData.inverseScreenValues
 
     @objc lazy var adaptiveDisplay = settingsData.resolution == 0 ? false : true
 
     @objc lazy var deviceModel = settingsData.iosDeviceModel as NSString
-    
+
     @objc lazy var macOSVersion = Float(settingsData.macOSVersion)
 
     @objc lazy var oemID: NSString = {
