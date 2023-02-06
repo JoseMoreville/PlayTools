@@ -8,7 +8,7 @@ import UIKit
 let screen = PlayScreen.shared
 let mainScreenWidth =  !PlaySettings.shared.inverseScreenValues ? PlaySettings.shared.windowSizeWidth : PlaySettings.shared.windowSizeHeight
 let mainScreenHeight = !PlaySettings.shared.inverseScreenValues ? PlaySettings.shared.windowSizeHeight : PlaySettings.shared.windowSizeWidth
-let macOSVersion = PlaySettings.shared.macOSVersion
+let macOSVersion = Float(PlaySettings.shared.macOSVersion) ?? 13.1
 
 extension CGSize {
     func aspectRatio() -> CGFloat {
@@ -20,7 +20,7 @@ extension CGSize {
     }
 
     func toAspectRatio() -> CGSize {
-        if macOSVersion  >= "13.2" {
+        if macOSVersion  >= 13.2 {
             return CGSize(width: mainScreenWidth, height: mainScreenHeight)
         } else {
             return CGSize(width: mainScreenHeight, height: mainScreenWidth)
@@ -109,7 +109,7 @@ public class PlayScreen: NSObject {
     }
     
     @objc public static func isRecentMacOS() -> Bool {
-        return macOSVersion >= "13.2"
+        return macOSVersion >= 13.2
     }
 
     var fullscreen: Bool {
