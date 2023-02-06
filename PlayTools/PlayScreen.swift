@@ -8,6 +8,7 @@ import UIKit
 let screen = PlayScreen.shared
 let mainScreenWidth =  !PlaySettings.shared.inverseScreenValues ? PlaySettings.shared.windowSizeWidth : PlaySettings.shared.windowSizeHeight
 let mainScreenHeight = !PlaySettings.shared.inverseScreenValues ? PlaySettings.shared.windowSizeHeight : PlaySettings.shared.windowSizeWidth
+let macOSVersion = PlaySettings.shared.macOSVersion
 
 extension CGSize {
     func aspectRatio() -> CGFloat {
@@ -19,7 +20,7 @@ extension CGSize {
     }
 
     func toAspectRatio() -> CGSize {
-        if #available(iOS 16.3, *) {
+        if macOSVersion  >= "13.2" {
             return CGSize(width: mainScreenWidth, height: mainScreenHeight)
         } else {
             return CGSize(width: mainScreenHeight, height: mainScreenWidth)
@@ -30,7 +31,7 @@ extension CGSize {
         return CGSize(width: mainScreenHeight, height: mainScreenWidth)
     }
     func toAspectRatioDefault() -> CGSize {
-            return CGSize(width: mainScreenHeight, height: mainScreenWidth)
+        return CGSize(width: mainScreenHeight, height: mainScreenWidth)
     }
     func toAspectRatioInternalDefault() -> CGSize {
         return CGSize(width: mainScreenWidth, height: mainScreenHeight)
