@@ -6,8 +6,9 @@ import Foundation
 import UIKit
 
 let screen = PlayScreen.shared
-let mainScreenWidth =  !PlaySettings.shared.inverseScreenValues ? PlaySettings.shared.windowSizeWidth : PlaySettings.shared.windowSizeHeight
-let mainScreenHeight = !PlaySettings.shared.inverseScreenValues ? PlaySettings.shared.windowSizeHeight : PlaySettings.shared.windowSizeWidth
+let isInvertFixEnabled = PlaySettings.shared.inverseScreenValues && PlaySettings.shared.adaptiveDisplay
+let mainScreenWidth =  !isInvertFixEnabled ? PlaySettings.shared.windowSizeWidth : PlaySettings.shared.windowSizeHeight
+let mainScreenHeight = !isInvertFixEnabled ? PlaySettings.shared.windowSizeHeight : PlaySettings.shared.windowSizeWidth
 let macOSVersion = PlaySettings.shared.macOSVersion
 
 extension CGSize {
