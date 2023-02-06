@@ -148,7 +148,7 @@ bool menuWasCreated = false;
 
 @implementation PTSwizzleLoader
 + (void)load {
-    if ([[PlaySettings shared] macOSVersion] >= 13.199) {
+    if ([[PlaySettings shared] macOSVersion] > 13.1) {
         if ([[PlaySettings shared] adaptiveDisplay]) {
             // This is an experimental fix
             if ([[PlaySettings shared] inverseScreenValues]) {
