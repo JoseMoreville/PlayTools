@@ -87,5 +87,5 @@ struct AppSettingsData: Codable {
     var playChain = false
     var playChainDebugging = false
     var inverseScreenValues = false
-    var macOSVersion: Double = 13.1
+    var macOSVersion: Double = 13.2
 }
