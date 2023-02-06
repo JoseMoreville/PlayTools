@@ -146,6 +146,11 @@ static OSStatus pt_SecItemDelete(CFDictionaryRef query) {
         retval = SecItemDelete(query);
     }
     [PlayKeychain debugLogger: [NSString stringWithFormat:@"SecItemDelete: %@", query]];
+    if ([[PlaySettings shared] macOSVersion] >= 13.2) {
+        NSLog(@"macOSVersion es mayor o igual a 13.2");
+    } else {
+        NSLog(@"macOSVersion es menor a 13.2");
+    }
     return retval;
 }
 
