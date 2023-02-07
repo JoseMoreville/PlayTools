@@ -120,6 +120,8 @@ static OSStatus pt_SecItemAdd(CFDictionaryRef attributes, CFTypeRef *result) {
         [PlayKeychain debugLogger: [NSString stringWithFormat:@"SecItemAdd: %@", attributes]];
         [PlayKeychain debugLogger: [NSString stringWithFormat:@"SecItemAdd result: %@", *result]];
     }
+    NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
+    NSLog(@"System Version: %@", systemVersion);
     return retval;
 }
 
