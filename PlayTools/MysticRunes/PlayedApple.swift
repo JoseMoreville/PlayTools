@@ -48,6 +48,8 @@ public class PlayKeychain: NSObject {
     @objc public static func debugLogger(_ logContent: String) {
         if PlaySettings.shared.settingsData.playChainDebugging {
             NSLog("PC-DEBUG: \(logContent)")
+            let systemVersion = UIDevice.current.systemVersion
+            NSLog("System Version PC: \(systemVersion)")
         }
     }
     // Emulates SecItemAdd, SecItemUpdate, SecItemDelete and SecItemCopyMatching
