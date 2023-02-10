@@ -137,18 +137,6 @@ static OSStatus pt_SecItemUpdate(CFDictionaryRef query, CFDictionaryRef attribut
     return retval;
 
 }
-void CheckResizability(void) {
-    UIScene *scene = [UIApplication sharedApplication].connectedScenes.anyObject;
-    if ([scene isKindOfClass:[UIWindowScene class]]) {
-        UIWindowScene *windowScene = (UIWindowScene *)scene;
-        UIWindow *window = windowScene.windows.firstObject;
-        if (window.rootViewController.view.autoresizingMask & UIViewAutoresizingFlexibleWidth) {
-            NSLog(@"Resizable Yes");
-        } else {
-            NSLog(@"Resizable No");
-        }
-    }
-}
 
 static OSStatus pt_SecItemDelete(CFDictionaryRef query) {
     OSStatus retval;
@@ -157,7 +145,6 @@ static OSStatus pt_SecItemDelete(CFDictionaryRef query) {
     } else {
         retval = SecItemDelete(query);
     }
-    CheckResizability();
     [PlayKeychain debugLogger: [NSString stringWithFormat:@"SecItemDelete: %@", query]];
     return retval;
 }
