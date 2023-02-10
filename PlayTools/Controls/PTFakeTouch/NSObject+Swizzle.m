@@ -149,10 +149,10 @@ bool menuWasCreated = false;
  */
 static BOOL hasCheckResizabilityRun = NO;
 void CheckResizability2(void) {
-    if (hasCheckResizabilityRun) {
-            return;
-        }
-    hasCheckResizabilityRun = YES;
+    //if (hasCheckResizabilityRun) {
+    //        return;
+    //    }
+    //hasCheckResizabilityRun = YES;
     UIScene *scene = [UIApplication sharedApplication].connectedScenes.anyObject;
     if ([scene isKindOfClass:[UIWindowScene class]]) {
         UIWindowScene *windowScene = (UIWindowScene *)scene;
