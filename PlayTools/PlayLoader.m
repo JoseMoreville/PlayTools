@@ -27,8 +27,8 @@ static int pt_uname(struct utsname *uts) {
     return 0;
 }
 
-static BOOL isResizable = false;
-static BOOL stopCheck = false;
+static BOOL isResizable = NO;
+static BOOL stopCheck = NO;
 void CheckResizability(void) {
     if(stopCheck){
         return;
@@ -39,9 +39,10 @@ void CheckResizability(void) {
         UIWindow *window = windowScene.windows.firstObject;
         if (window.rootViewController.view.autoresizingMask & UIViewAutoresizingFlexibleWidth) {
             NSLog(@"Resizable Yes");
-            isResizable = true;
-            stopCheck = true;
+            isResizable = YES;
+            stopCheck = YES;
         } else {
+            NSLog(@"Resizable Yes");
             return;
         }
     }
