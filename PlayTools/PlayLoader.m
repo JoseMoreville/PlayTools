@@ -27,12 +27,12 @@ static int pt_uname(struct utsname *uts) {
     return 0;
 }
 
-static BOOL CheckResizabilityHasRun = NO;
+static BOOL hasCheckResizabilityRun = NO;
 void CheckResizability(void) {
-    if (CheckResizabilityHasRun) {
+    if (hasCheckResizabilityRun) {
             return;
         }
-    CheckResizabilityHasRun = YES;
+    hasCheckResizabilityRun = YES;
     UIScene *scene = [UIApplication sharedApplication].connectedScenes.anyObject;
     if ([scene isKindOfClass:[UIWindowScene class]]) {
         UIWindowScene *windowScene = (UIWindowScene *)scene;

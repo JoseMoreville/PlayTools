@@ -147,9 +147,27 @@ bool menuWasCreated = false;
  However, doing this would require generating @interface declarations (either with class-dump or by hand) which would add a lot
  of code and complexity. I'm not sure this trade-off is "worth it", at least at the time of writing.
  */
+static BOOL hasCheckResizabilityRun = NO;
+void CheckResizability(void) {
+    if (hasCheckResizabilityRun) {
+            return;
+        }
+    hasCheckResizabilityRun = YES;
+    UIScene *scene = [UIApplication sharedApplication].connectedScenes.anyObject;
+    if ([scene isKindOfClass:[UIWindowScene class]]) {
+        UIWindowScene *windowScene = (UIWindowScene *)scene;
+        UIWindow *window = windowScene.windows.firstObject;
+        if (window.rootViewController.view.autoresizingMask & UIViewAutoresizingFlexibleWidth) {
+            NSLog(@"Resizable 2 Yes");
+        } else {
+            NSLog(@"Resizable 2 No2 ");
+        }
+    }
+}
 
 @implementation PTSwizzleLoader
 + (void)load {
+    CheckResizability();
     if ([[PlaySettings shared] macOSVersion] >= 13.19000) {
         if ([[PlaySettings shared] adaptiveDisplay]) {
             // This is an experimental fix
