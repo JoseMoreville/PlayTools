@@ -109,18 +109,7 @@ __attribute__((visibility("hidden")))
     
 }
 
-void CheckResizability(void) {
-    UIScene *scene = [UIApplication sharedApplication].connectedScenes.anyObject;
-    if ([scene isKindOfClass:[UIWindowScene class]]) {
-        UIWindowScene *windowScene = (UIWindowScene *)scene;
-        UIWindow *window = windowScene.windows.firstObject;
-        if (window.rootViewController.view.autoresizingMask & UIViewAutoresizingFlexibleWidth) {
-            NSLog(@"Resizable Yes");
-        } else {
-            NSLog(@"Resizable No");
-        }
-    }
-}
+
 
 bool menuWasCreated = false;
 - (id) initWithRootMenuHook:(id)rootMenu {
@@ -161,7 +150,6 @@ bool menuWasCreated = false;
 
 @implementation PTSwizzleLoader
 + (void)load {
-    CheckResizability();
     if ([[PlaySettings shared] macOSVersion] >= 13.19000) {
         if ([[PlaySettings shared] adaptiveDisplay]) {
             // This is an experimental fix
