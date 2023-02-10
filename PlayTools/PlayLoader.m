@@ -42,7 +42,7 @@ void CheckResizability(void) {
             isResizable = YES;
             stopCheck = YES;
         } else {
-            NSLog(@"Resizable Yes");
+            NSLog(@"Resizable No");
             return;
         }
     }
