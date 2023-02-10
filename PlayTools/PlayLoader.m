@@ -154,11 +154,24 @@ DYLD_INTERPOSE(pt_SecItemAdd, SecItemAdd)
 DYLD_INTERPOSE(pt_SecItemUpdate, SecItemUpdate)
 DYLD_INTERPOSE(pt_SecItemDelete, SecItemDelete)
 
+void CheckResizability(void) {
+    UIScene *scene = [UIApplication sharedApplication].connectedScenes.anyObject;
+    if ([scene isKindOfClass:[UIWindowScene class]]) {
+        UIWindowScene *windowScene = (UIWindowScene *)scene;
+        UIWindow *window = windowScene.windows.firstObject;
+        if (window.rootViewController.view.autoresizingMask & UIViewAutoresizingFlexibleWidth) {
+            NSLog(@"Yes");
+        } else {
+            NSLog(@"No");
+        }
+    }
+}
 
 @implementation PlayLoader
 
 static void __attribute__((constructor)) initialize(void) {
     [PlayCover launch];
+    CheckResizability();
 }
 
 @end
