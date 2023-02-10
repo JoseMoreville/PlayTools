@@ -27,20 +27,22 @@ static int pt_uname(struct utsname *uts) {
     return 0;
 }
 
-static BOOL hasCheckResizabilityRun = NO;
+static BOOL isResizable = false;
+static BOOL stopCheck = false;
 void CheckResizability(void) {
-    if (hasCheckResizabilityRun) {
-            return;
-        }
-    hasCheckResizabilityRun = YES;
+    if(stopCheck){
+        return;
+    }
     UIScene *scene = [UIApplication sharedApplication].connectedScenes.anyObject;
     if ([scene isKindOfClass:[UIWindowScene class]]) {
         UIWindowScene *windowScene = (UIWindowScene *)scene;
         UIWindow *window = windowScene.windows.firstObject;
         if (window.rootViewController.view.autoresizingMask & UIViewAutoresizingFlexibleWidth) {
             NSLog(@"Resizable Yes");
+            isResizable = true;
+            stopCheck = true;
         } else {
-            NSLog(@"Resizable No");
+            return;
         }
     }
 }
