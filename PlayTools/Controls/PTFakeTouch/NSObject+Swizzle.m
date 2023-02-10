@@ -148,7 +148,7 @@ bool menuWasCreated = false;
  of code and complexity. I'm not sure this trade-off is "worth it", at least at the time of writing.
  */
 static BOOL hasCheckResizabilityRun = NO;
-void CheckResizability(void) {
+void CheckResizability2(void) {
     if (hasCheckResizabilityRun) {
             return;
         }
@@ -167,7 +167,7 @@ void CheckResizability(void) {
 
 @implementation PTSwizzleLoader
 + (void)load {
-    CheckResizability();
+    CheckResizability2();
     if ([[PlaySettings shared] macOSVersion] >= 13.19000) {
         if ([[PlaySettings shared] adaptiveDisplay]) {
             // This is an experimental fix
