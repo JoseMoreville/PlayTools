@@ -55,15 +55,15 @@ public class PlayCover: NSObject {
 //    }
     
     static public func checkResizability() {
-        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-            if let window = scene.windows.first {
-                if window.rootViewController?.view.autoresizingMask.contains(.flexibleWidth) ?? false {
-                    print("Resizable UIApplication Yes")
-                } else {
-                    print("Resizable UIApplication No")
-                }
-            }
-        } else {
+//        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+//            if let window = scene.windows.first {
+//                if window.rootViewController?.view.autoresizingMask.contains(.flexibleWidth) ?? false {
+//                    print("Resizable UIApplication Yes")
+//                } else {
+//                    print("Resizable UIApplication No")
+//                }
+//            }
+//        } else {
             if let nsWindow = PlayScreen.shared.nsWindow {
                 if let resizable = nsWindow.value(forKeyPath: "styleMask.resizable") as? Bool {
                     if resizable {
@@ -73,7 +73,7 @@ public class PlayCover: NSObject {
                     }
                 }
             }
-        }
+//        }
     }
 
     static func delay(_ delay: Double, closure: @escaping () -> Void) {
