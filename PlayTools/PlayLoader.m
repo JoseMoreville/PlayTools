@@ -27,31 +27,10 @@ static int pt_uname(struct utsname *uts) {
     return 0;
 }
 
-static BOOL isResizable = NO;
-static BOOL stopCheck = NO;
-void CheckResizability(void) {
-    if(stopCheck){
-        return;
-    }
-    UIScene *scene = [UIApplication sharedApplication].connectedScenes.anyObject;
-    if ([scene isKindOfClass:[UIWindowScene class]]) {
-        UIWindowScene *windowScene = (UIWindowScene *)scene;
-        UIWindow *window = windowScene.windows.firstObject;
-        if (window.rootViewController.view.autoresizingMask & UIViewAutoresizingFlexibleWidth) {
-            NSLog(@"Resizable Yes");
-            isResizable = YES;
-            stopCheck = YES;
-        } else {
-            NSLog(@"Resizable No");
-            return;
-        }
-    }
-}
 
 // Update output of sysctl for key values hw.machine, hw.product and hw.target to match iOS output
 // This spoofs the device type to apps allowing us to report as any iOS device
 static int pt_sysctl(int *name, u_int types, void *buf, size_t *size, void *arg0, size_t arg1) {
-    CheckResizability();
     if (name[0] == CTL_HW && (name[1] == HW_MACHINE || name[0] == HW_PRODUCT)) {
         if (NULL == buf) {
             *size = strlen(DEVICE_MODEL) + 1;

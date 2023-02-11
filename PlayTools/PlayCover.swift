@@ -13,6 +13,13 @@ public class PlayCover: NSObject {
 
     @objc static public func launch() {
         quitWhenClose()
+        NotificationCenter.default.addObserver(
+            forName: UIScene.didActivateNotification,
+            object: nil,
+            queue: OperationQueue.main
+        ) { notif in
+            checkResizability();
+        }
         AKInterface.initialize()
         PlayInput.shared.initialize()
         DiscordIPC.shared.initialize()
@@ -31,6 +38,18 @@ public class PlayCover: NSObject {
         ) { notif in
             if PlayScreen.shared.nsWindow?.isEqual(notif.object) ?? false {
                 AKInterface.shared!.terminateApplication()
+            }
+        }
+    }
+
+    static public func checkResizability() {
+        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            if let window = scene.windows.first {
+                if window.rootViewController?.view.autoresizingMask.contains(.flexibleWidth) ?? false {
+                    print("Resizable Yes")
+                } else {
+                    print("Resizable No")
+                }
             }
         }
     }
