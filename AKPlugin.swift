@@ -88,12 +88,12 @@ class AKPlugin: NSObject, Plugin {
             window.titlebarAppearsTransparent = true
             window.titleVisibility = .hidden
             window.toolbar = nil
-            
             window.setFrame(NSRect(origin: originalFrame.origin,
                                    size: CGSize(width: originalFrame.width,
                                                 height: originalFrame.height + titlebarHeight)),
                             display: true)
             window.title = "test methods?"
+            window.styleMask.remove(.titled)
         }
     }
 
