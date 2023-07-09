@@ -154,9 +154,31 @@ bool menuWasCreated = false;
  */
 
 @implementation PTSwizzleLoader
++ (UIWindow *)getWindow {
+    UIWindow *mainWindow = nil;
+    
+    // Obtener la escena activa
+    UIWindowScene *activeScene = nil;
+    for (UIScene *scene in [UIApplication sharedApplication].connectedScenes) {
+        if (scene.activationState == UISceneActivationStateForegroundActive) {
+            activeScene = (UIWindowScene *)scene;
+            break;
+        }
+    }
+    
+    // Obtener la ventana principal de la escena activa
+    mainWindow = activeScene.windows.firstObject;
+    
+    return mainWindow;
+}
+
 + (void)load {
-    [PlayScreen enableBorderless];
+
     // This might need refactor soon
+    UIWindow *wwindow = [self getWindow];
+        if (wwindow) {
+            [PlayScreen enableBorderlessFor:wwindow];
+    }
     if(@available(iOS 16.3, *)) {
         if ([[PlaySettings shared] adaptiveDisplay]) {
             // This is an experimental fix
