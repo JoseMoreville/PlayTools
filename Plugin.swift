@@ -22,6 +22,7 @@ public protocol Plugin: NSObjectProtocol {
     func hideCursor()
     func warpCursor()
     func unhideCursor()
+    func enableBorderless()
     func terminateApplication()
     func setupKeyboard(keyboard: @escaping(UInt16, Bool, Bool) -> Bool,
                        swapMode: @escaping() -> Bool)

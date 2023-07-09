@@ -30,6 +30,8 @@ let settings = PlaySettings.shared
     lazy var notch = settingsData.notch
 
     lazy var sensitivity = settingsData.sensitivity / 100
+    
+    lazy var borderless = settingsData.borderless
 
     @objc lazy var bypass = settingsData.bypass
 
@@ -96,4 +98,5 @@ struct AppSettingsData: Codable {
     var windowFixMethod = 0
     var rootWorkDir = true
     var noKMOnInput = false
+    var borderless = false
 }

@@ -21,6 +21,10 @@ public class PlayCover: NSObject {
             // Change the working directory to / just like iOS
             FileManager.default.changeCurrentDirectoryPath("/")
         }
+        
+        if PlaySettings.shared.borderless {
+            AKInterface.shared!.enableBorderless()
+        }
     }
 
     @objc static public func initMenu(menu: NSObject) {
