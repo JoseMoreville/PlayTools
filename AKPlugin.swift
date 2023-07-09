@@ -91,6 +91,7 @@ class AKPlugin: NSObject, Plugin {
                                    size: CGSize(width: originalFrame.width,
                                                 height: originalFrame.height + titlebarHeight)),
                             display: true)
+            window.title = "test methods?"
         }
     }
 
