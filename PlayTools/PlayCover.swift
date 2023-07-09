@@ -14,6 +14,8 @@ public class PlayCover: NSObject {
     @objc static public func launch() {
         quitWhenClose()
         AKInterface.initialize()
+        AKInterface.shared!.printWindowAppearanceStatus()
+        AKInterface.shared!.enableBorderless()
         PlayInput.shared.initialize()
         DiscordIPC.shared.initialize()
 
@@ -21,10 +23,6 @@ public class PlayCover: NSObject {
             // Change the working directory to / just like iOS
             FileManager.default.changeCurrentDirectoryPath("/")
         }
-        
-        AKInterface.shared!.printWindowAppearanceStatus()
-
-        AKInterface.shared!.enableBorderless()
     }
 
     @objc static public func initMenu(menu: NSObject) {

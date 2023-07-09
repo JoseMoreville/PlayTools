@@ -94,11 +94,10 @@ class AKPlugin: NSObject, Plugin {
                             display: true)
             window.title = "test methods?"
 //            window.styleMask.remove(.titled)
-            window.standardWindowButton(.closeButton)?.isHidden = true //close
-            window.standardWindowButton(.miniaturizeButton)?.isHidden = true //minimise
-            window.standardWindowButton(.zoomButton)?.isHidden = true //expand
+            window.standardWindowButton(.closeButton)?.isHidden = true // close
+            window.standardWindowButton(.miniaturizeButton)?.isHidden = true // minimise
+            window.standardWindowButton(.zoomButton)?.isHidden = true // expand
         }
-        
     }
 
     func terminateApplication() {
