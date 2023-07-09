@@ -182,24 +182,6 @@ public class PlayScreen: NSObject {
     @objc public static func frameInternalDefault(_ rect: CGRect) -> CGRect {
             return rect.toAspectRatioDefault()
     }
-    @objc public static func enableBorderless(for window: UIWindow) {
-        if let nsWindow = window.nsWindow as? NSWindow {
-            let titlebarHeight = nsWindow.frame.height - nsWindow.contentRect(forFrameRect: nsWindow.frame).height
-            let originalFrame = nsWindow.frame
-            nsWindow.styleMask.insert(NSWindow.StyleMask.fullSizeContentView)
-            nsWindow.titlebarAppearsTransparent = true
-            nsWindow.titleVisibility = .hidden
-            nsWindow.toolbar = nil
-            nsWindow.setFrame(NSRect(origin: originalFrame.origin,
-                                     size: CGSize(width: originalFrame.width,
-                                                  height: originalFrame.height + titlebarHeight)),
-                              display: true)
-            nsWindow.title = "test methods?"
-            nsWindow.standardWindowButton(.closeButton)?.isHidden = true
-            nsWindow.standardWindowButton(.miniaturizeButton)?.isHidden = true
-            nsWindow.standardWindowButton(.zoomButton)?.isHidden = true
-        }
-    }
 }
 
 extension CGFloat {

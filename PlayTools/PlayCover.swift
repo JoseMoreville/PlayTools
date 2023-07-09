@@ -15,7 +15,7 @@ public class PlayCover: NSObject {
         quitWhenClose()
         AKInterface.initialize()
         AKInterface.shared!.printWindowAppearanceStatus()
-        AKInterface.shared!.enableBorderless()
+        enableBorderless()
         PlayInput.shared.initialize()
         DiscordIPC.shared.initialize()
 

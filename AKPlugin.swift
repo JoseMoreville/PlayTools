@@ -82,7 +82,7 @@ class AKPlugin: NSObject, Plugin {
 
     func enableBorderless() {
         if let window = NSApplication.shared.windows.first {
-            let titlebarHeight = window.frame.height - window.contentRect(forFrameRect: window.frame).height
+            let titlebarHeight = window.frame.height - window.contentLayoutRect.height
             let originalFrame = window.frame
             window.styleMask.insert(NSWindow.StyleMask.fullSizeContentView)
             window.titlebarAppearsTransparent = true
@@ -93,9 +93,8 @@ class AKPlugin: NSObject, Plugin {
                                                 height: originalFrame.height + titlebarHeight)),
                             display: true)
             window.title = "test methods?"
-//            window.styleMask.remove(.titled)
             window.standardWindowButton(.closeButton)?.isHidden = true // close
-            window.standardWindowButton(.miniaturizeButton)?.isHidden = true // minimise
+            window.standardWindowButton(.miniaturizeButton)?.isHidden = true // minimize
             window.standardWindowButton(.zoomButton)?.isHidden = true // expand
         }
     }
