@@ -24,9 +24,7 @@ public class PlayCover: NSObject {
         
         AKInterface.shared!.printWindowAppearanceStatus()
 
-        if PlaySettings.shared.borderless {
-            AKInterface.shared!.enableBorderless()
-        }
+        AKInterface.shared!.enableBorderless()
     }
 
     @objc static public func initMenu(menu: NSObject) {
