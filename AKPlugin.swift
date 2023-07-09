@@ -93,8 +93,12 @@ class AKPlugin: NSObject, Plugin {
                                                 height: originalFrame.height + titlebarHeight)),
                             display: true)
             window.title = "test methods?"
-            window.styleMask.remove(.titled)
+//            window.styleMask.remove(.titled)
+            window.standardWindowButton(.closeButton)?.isHidden = true //close
+            window.standardWindowButton(.miniaturizeButton)?.isHidden = true //minimise
+            window.standardWindowButton(.zoomButton)?.isHidden = true //expand
         }
+        
     }
 
     func terminateApplication() {
