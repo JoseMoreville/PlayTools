@@ -60,7 +60,26 @@ class AKPlugin: NSObject, Plugin {
             CGAssociateMouseAndMouseCursorPosition(1)
         }
     }
-    
+
+    func printWindowAppearanceStatus() {
+        if let window = NSApplication.shared.windows.first {
+            let isTitleBarTransparent = window.titlebarAppearsTransparent
+            let frame = window.frame
+            let contentRect = window.contentRect(forFrameRect: frame)
+            let titlebarHeight = frame.height - contentRect.height
+            let aspectRatio = contentRect.width / contentRect.height
+
+            print("Estado de la apariencia de la ventana:")
+            print("Barra de título transparente: \(isTitleBarTransparent)")
+            print("Tamaño de la ventana: \(frame.size)")
+            print("Tamaño del contenido: \(contentRect.size)")
+            print("Altura de la barra de título: \(titlebarHeight)")
+            print("Relación de aspecto: \(aspectRatio)")
+            print("constrainFrameRect: \(window.constrainFrameRect(frame, to: window.screen!))")
+            print("----------------------------------------")
+        }
+    }
+
     func enableBorderless() {
         if let window = NSApplication.shared.windows.first {
             let titlebarHeight = window.frame.height - window.contentRect(forFrameRect: window.frame).height

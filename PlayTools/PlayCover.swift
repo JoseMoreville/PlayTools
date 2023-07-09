@@ -22,6 +22,8 @@ public class PlayCover: NSObject {
             FileManager.default.changeCurrentDirectoryPath("/")
         }
         
+        AKInterface.shared!.printWindowAppearanceStatus()
+
         if PlaySettings.shared.borderless {
             AKInterface.shared!.enableBorderless()
         }
