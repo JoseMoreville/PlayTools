@@ -87,6 +87,8 @@ class AKPlugin: NSObject, Plugin {
             window.styleMask.insert(NSWindow.StyleMask.fullSizeContentView)
             window.titlebarAppearsTransparent = true
             window.titleVisibility = .hidden
+            window.toolbar = nil
+            
             window.setFrame(NSRect(origin: originalFrame.origin,
                                    size: CGSize(width: originalFrame.width,
                                                 height: originalFrame.height + titlebarHeight)),
