@@ -210,6 +210,44 @@ public class PlayScreen: NSObject {
             print("Window made resizable")
         }
     }
+    
+    @objc public func forceWindowResizable() {
+        DispatchQueue.main.async {
+            guard let window = self.window,
+                  let nsWindow = window.nsWindow else {
+                print("Failed to get NSWindow")
+                return
+            }
+            
+            // Get current style mask
+            let currentStyleMask = nsWindow.value(forKey: "styleMask") as? UInt ?? 0
+            
+            // Define style mask bits
+            let NSWindowStyleMaskResizable: UInt = 1 << 3
+            
+            // Add resizable style mask
+            let newStyleMask = currentStyleMask | NSWindowStyleMaskResizable
+            
+            // Set new style mask
+            nsWindow.setValue(newStyleMask, forKey: "styleMask")
+            
+            // Set minimum and maximum sizes
+            let minSize = CGSize(width: 300, height: 300)
+            let maxSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
+            nsWindow.setValue(minSize, forKey: "minSize")
+            nsWindow.setValue(maxSize, forKey: "maxSize")
+            
+            // Enable size and position changes
+            nsWindow.setValue(true, forKey: "allowsTransparency")
+            nsWindow.setValue(true, forKey: "movable")
+            nsWindow.setValue(true, forKey: "movableByWindowBackground")
+            
+            // Force the window to update
+            nsWindow.performSelector(onMainThread: Selector(("makeKeyAndOrderFront:")), with: nil, waitUntilDone: true)
+            
+            print("Window forced to be resizable")
+        }
+    }
 
 }
 

@@ -16,7 +16,7 @@ public class PlayCover: NSObject {
         AKInterface.initialize()
         PlayInput.shared.initialize()
         DiscordIPC.shared.initialize()
-
+        PlayCover.makeWindowResizable()
         if PlaySettings.shared.rootWorkDir {
             // Change the working directory to / just like iOS
             FileManager.default.changeCurrentDirectoryPath("/")
@@ -71,7 +71,12 @@ public class PlayCover: NSObject {
             }
         }
     }
-
+    @objc static public func makeWindowResizable() {
+        DispatchQueue.main.async {
+            PlayScreen.shared.forceWindowResizable()
+        }
+    }
+    
     static func delay(_ delay: Double, closure: @escaping () -> Void) {
         let when = DispatchTime.now() + delay
         DispatchQueue.main.asyncAfter(deadline: when, execute: closure)
