@@ -131,6 +131,7 @@ __attribute__((visibility("hidden")))
     // do nothing
 }
 
+
 // Hook for UIUserInterfaceIdiom
 
 // - (long long) hook_userInterfaceIdiom {
