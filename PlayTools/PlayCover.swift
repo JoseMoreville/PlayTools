@@ -21,7 +21,7 @@ public class PlayCover: NSObject {
             // Change the working directory to / just like iOS
             FileManager.default.changeCurrentDirectoryPath("/")
         }
-        makeWindowResizable()
+        toggleWindowResizability(isResizable: true)
     }
 
     @objc static public func initMenu(menu: NSObject) {
@@ -78,36 +78,43 @@ public class PlayCover: NSObject {
         DispatchQueue.main.asyncAfter(deadline: when, execute: closure)
     }
 
-    static private func makeWindowResizable() {
-        DispatchQueue.main.async {
-            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                  let window = windowScene.windows.first,
-                  let nsWindow = window.value(forKey: "nsWindow") as? NSObject else {
-                print("Failed to get NSWindow")
-                return
+    @objc static public func toggleWindowResizability(isResizable: Bool) {
+            DispatchQueue.main.async {
+                guard let window = UIApplication.shared.windows.first,
+                      let nsWindow = window.value(forKey: "nsWindow") as? NSObject else {
+                    print("Failed to get NSWindow")
+                    return
+                }
+                
+                // Get current style mask
+                let currentStyleMask = nsWindow.value(forKey: "styleMask") as? UInt ?? 0
+                
+                // Define style mask bits
+                let NSWindowStyleMaskResizable: UInt = 1 << 3
+                
+                // Calculate new style mask
+                let newStyleMask: UInt
+                if isResizable {
+                    newStyleMask = currentStyleMask | NSWindowStyleMaskResizable
+                } else {
+                    newStyleMask = currentStyleMask & ~NSWindowStyleMaskResizable
+                }
+                
+                // Set new style mask
+                nsWindow.setValue(newStyleMask, forKey: "styleMask")
+                
+                if isResizable {
+                    // Set minimum and maximum sizes when making resizable
+                    let minSize = CGSize(width: 300, height: 300)
+                    let maxSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
+                    nsWindow.setValue(minSize, forKey: "minSize")
+                    nsWindow.setValue(maxSize, forKey: "maxSize")
+                }
+                
+                // Force the window to update
+                nsWindow.performSelector(onMainThread: Selector(("makeKeyAndOrderFront:")), with: nil, waitUntilDone: true)
+                
+                print("Window resizability set to: \(isResizable)")
             }
-
-            // Enable window resizing
-            nsWindow.setValue(false, forKey: "styleMask")
-            nsWindow.setValue(true, forKey: "isOpaque")
-            nsWindow.setValue(false, forKey: "hasShadow")
-
-            let styleMask: UInt =
-                (1 << 0) |  // NSWindowStyleMaskTitled
-                (1 << 1) |  // NSWindowStyleMaskClosable
-                (1 << 2) |  // NSWindowStyleMaskMiniaturizable
-                (1 << 3) |  // NSWindowStyleMaskResizable
-                (1 << 4)    // NSWindowStyleMaskUnifiedTitleAndToolbar
-
-            nsWindow.setValue(styleMask, forKey: "styleMask")
-            // Set minimum and maximum sizes using CGSize
-            let minSize = CGSize(width: 300, height: 300)
-            let maxSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
-            nsWindow.setValue(minSize, forKey: "minSize")
-            nsWindow.setValue(maxSize, forKey: "maxSize")
-
-            // Force the window to update
-            nsWindow.performSelector(onMainThread: Selector(("makeKeyAndOrderFront:")), with: nil, waitUntilDone: true)
         }
-    }
 }
