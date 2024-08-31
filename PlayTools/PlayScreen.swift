@@ -182,6 +182,34 @@ public class PlayScreen: NSObject {
     @objc public static func frameInternalDefault(_ rect: CGRect) -> CGRect {
             return rect.toAspectRatioDefault()
     }
+    
+    @objc public func makeWindowResizable() {
+        DispatchQueue.main.async {
+            guard let window = self.window,
+                  let nsWindow = window.nsWindow else {
+                print("Failed to get NSWindow")
+                return
+            }
+            
+            let styleMask: UInt =
+                (1 << 0) |  // NSWindowStyleMaskTitled
+                (1 << 1) |  // NSWindowStyleMaskClosable
+                (1 << 2) |  // NSWindowStyleMaskMiniaturizable
+                (1 << 3)    // NSWindowStyleMaskResizable
+            
+            nsWindow.setValue(styleMask, forKey: "styleMask")
+            
+            let minSize = CGSize(width: 300, height: 300)
+            let maxSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
+            nsWindow.setValue(minSize, forKey: "minSize")
+            nsWindow.setValue(maxSize, forKey: "maxSize")
+            
+            // Force the window to update
+            nsWindow.performSelector(onMainThread: Selector(("makeKeyAndOrderFront:")), with: nil, waitUntilDone: true)
+            
+            print("Window made resizable")
+        }
+    }
 
 }
 

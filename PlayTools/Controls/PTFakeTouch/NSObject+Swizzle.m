@@ -18,6 +18,11 @@ __attribute__((visibility("hidden")))
 @end
 
 @implementation NSObject (Swizzle)
+- (void)hook_makeKeyAndVisible {
+    [self hook_makeKeyAndVisible];
+    [[PlayScreen shared] makeWindowResizable];
+}
+
 
 - (void) swizzleInstanceMethod:(SEL)origSelector withMethod:(SEL)newSelector
 {
@@ -172,6 +177,8 @@ bool menuWasCreated = false;
 @implementation PTSwizzleLoader
 + (void)load {
     // This might need refactor soon
+    [objc_getClass("UIWindow") swizzleInstanceMethod:@selector(makeKeyAndVisible) withMethod:@selector(hook_makeKeyAndVisible)];
+
     if(@available(iOS 16.3, *)) {
         if ([[PlaySettings shared] adaptiveDisplay]) {
             // This is an experimental fix
