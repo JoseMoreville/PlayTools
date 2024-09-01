@@ -16,7 +16,9 @@ public class PlayCover: NSObject {
         AKInterface.initialize()
         PlayInput.shared.initialize()
         DiscordIPC.shared.initialize()
-        PlayCover.makeWindowResizable()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//             PlayCover.makeWindowResizable()
+         }
         if PlaySettings.shared.rootWorkDir {
             // Change the working directory to / just like iOS
             FileManager.default.changeCurrentDirectoryPath("/")
@@ -69,11 +71,6 @@ public class PlayCover: NSObject {
                 // It may run into infinite loops, end up silently heating the device up.
                 // This actually happens for ToF. Hope future developers can solve this.
             }
-        }
-    }
-    @objc static public func makeWindowResizable() {
-        DispatchQueue.main.async {
-            PlayScreen.shared.forceWindowResizable()
         }
     }
     

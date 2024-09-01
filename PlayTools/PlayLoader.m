@@ -10,6 +10,8 @@
 #import <PlayTools/PlayTools-Swift.h>
 #import <sys/utsname.h>
 #import "NSObject+Swizzle.h"
+#import <objc/runtime.h>
+#import <UIKit/UIKit.h>
 
 // Get device model from playcover .plist
 // With a null terminator
@@ -27,7 +29,6 @@ static int pt_uname(struct utsname *uts) {
     strncpy(uts->machine, DEVICE_MODEL, strlen(DEVICE_MODEL) + 1);
     return 0;
 }
-
 
 // Update output of sysctl for key values hw.machine, hw.product and hw.target to match iOS output
 // This spoofs the device type to apps allowing us to report as any iOS device
@@ -158,7 +159,6 @@ static OSStatus pt_SecItemUpdate(CFDictionaryRef query, CFDictionaryRef attribut
         }
     }
     return retval;
-
 }
 
 static OSStatus pt_SecItemDelete(CFDictionaryRef query) {
@@ -179,10 +179,39 @@ DYLD_INTERPOSE(pt_SecItemAdd, SecItemAdd)
 DYLD_INTERPOSE(pt_SecItemUpdate, SecItemUpdate)
 DYLD_INTERPOSE(pt_SecItemDelete, SecItemDelete)
 
+@interface UIWindow (Resizable)
+- (void)swizzled_makeKeyAndVisible;
+@end
+
+@implementation UIWindow (Resizable)
+
+- (void)swizzled_makeKeyAndVisible {
+    // Call original implementation
+    [self swizzled_makeKeyAndVisible];
+    
+    // Make window resizable using PlayScreen
+    [[PlayScreen shared] makeWindowResizable:self];
+}
+
+@end
+
 @implementation PlayLoader
 
 static void __attribute__((constructor)) initialize(void) {
     [PlayCover launch];
+    
+    // Swizzle UIWindow's makeKeyAndVisible method
+    Class windowClass = [UIWindow class];
+    Method originalMethod = class_getInstanceMethod(windowClass, @selector(makeKeyAndVisible));
+    Method swizzledMethod = class_getInstanceMethod(windowClass, @selector(swizzled_makeKeyAndVisible));
+    
+    if (class_addMethod(windowClass, @selector(swizzled_makeKeyAndVisible), method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))) {
+        class_replaceMethod(windowClass, @selector(makeKeyAndVisible), method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
+    } else {
+        method_exchangeImplementations(originalMethod, swizzledMethod);
+    }
+    
+    NSLog(@"PlayLoader initialized and window resizing enabled");
 }
 
 @end

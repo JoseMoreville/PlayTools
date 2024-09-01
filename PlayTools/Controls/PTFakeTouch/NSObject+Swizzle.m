@@ -20,7 +20,6 @@ __attribute__((visibility("hidden")))
 @implementation NSObject (Swizzle)
 - (void)hook_makeKeyAndVisible {
     [self hook_makeKeyAndVisible];
-    [[PlayScreen shared] makeWindowResizable];
 }
 
 
@@ -130,7 +129,6 @@ __attribute__((visibility("hidden")))
 - (void) hook_setCurrentSubscription:(VSSubscription *)currentSubscription {
     // do nothing
 }
-
 
 // Hook for UIUserInterfaceIdiom
 
