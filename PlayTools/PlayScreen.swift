@@ -197,29 +197,29 @@ extension UIScreen {
             print("Attempting to make window resizable")
             
             // Set style mask
-            let styleMask: NSWindow.StyleMask = [.titled, .closable, .miniaturizable, .resizable]
-            nsWindow.perform(Selector(("setStyleMask:")), with: NSNumber(value: styleMask.rawValue))
+            let styleMask: UInt = 15 // NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable
+            nsWindow.perform(Selector(("setStyleMask:")), with: NSNumber(value: styleMask))
             
             // Set min and max sizes
-            let minSize = NSSize(width: 300, height: 300)
-            let maxSize = NSSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
-            nsWindow.perform(Selector(("setMinSize:")), with: NSValue(size: minSize))
-            nsWindow.perform(Selector(("setMaxSize:")), with: NSValue(size: maxSize))
+            let minSize = CGSize(width: 300, height: 300)
+            let maxSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
+            nsWindow.perform(Selector(("setMinSize:")), with: NSValue(cgSize: minSize))
+            nsWindow.perform(Selector(("setMaxSize:")), with: NSValue(cgSize: maxSize))
             
             // Make window movable
             nsWindow.perform(Selector(("setMovable:")), with: true)
-            // Allow the window to move
             nsWindow.perform(Selector(("setMovableByWindowBackground:")), with: true)
-
+            
             // Ensure the window is not constrained
             nsWindow.perform(Selector(("setConstrainedByScreenEdges:")), with: false)
             
             // Set collection behavior
-            let collectionBehavior: NSWindow.CollectionBehavior = [.fullScreenPrimary]
-            nsWindow.perform(Selector(("setCollectionBehavior:")), with: NSNumber(value: collectionBehavior.rawValue))
+            let collectionBehavior: UInt = 128 // NSWindowCollectionBehaviorFullScreenPrimary
+            nsWindow.perform(Selector(("setCollectionBehavior:")), with: NSNumber(value: collectionBehavior))
             
             print("Window properties set for resizing")
             
+            // Force update
             nsWindow.perform(Selector(("display")))
             nsWindow.perform(Selector(("setNeedsDisplay:")), with: true)
         }
