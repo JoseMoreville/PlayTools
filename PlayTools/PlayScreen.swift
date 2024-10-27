@@ -192,13 +192,24 @@ extension UIScreen {
             
             print("Attempting to make window resizable")
             
-            // Set style mask
-            let styleMask: UInt = 15 // NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable
-            nsWindow.perform(Selector(("setStyleMask:")), with: NSNumber(value: styleMask))
+            // Try to exit full-screen mode
+            if let fullScreenExit = nsWindow.value(forKey: "toggleFullScreen:") as? Selector {
+                nsWindow.perform(fullScreenExit)
+            }
             
-            // Make window movable
-            nsWindow.perform(Selector(("setMovable:")), with: true)
-            nsWindow.perform(Selector(("setMovableByWindowBackground:")), with: true)
+            // Get current style mask
+            if let currentStyleMask = nsWindow.value(forKey: "styleMask") as? UInt {
+                print("Current style mask: \(currentStyleMask)")
+                
+                // Add resizable flag to current style mask
+                let newStyleMask = currentStyleMask | 0x8 // NSWindowStyleMaskResizable
+                
+                do {
+                    try nsWindow.setValue(newStyleMask, forKey: "styleMask")
+                    print("Style mask updated successfully")
+                } catch {
+                    print("Failed to set style mask: \(error)")
+                }
             
             print("Window properties set for resizing")
         }
@@ -213,11 +224,17 @@ extension UIScreen {
             
             print("Attempting to prevent full-screen mode")
             
-            // Prevent full-screen mode
-            let collectionBehavior: UInt = 0 // NSWindowCollectionBehaviorDefault
-            nsWindow.perform(Selector(("setCollectionBehavior:")), with: NSNumber(value: collectionBehavior))
-            
-            print("Window collection behavior set to prevent full-screen")
+            if let currentBehavior = nsWindow.value(forKey: "collectionBehavior") as? UInt {
+                let newBehavior = currentBehavior & ~(1 << 7) // Remove NSWindowCollectionBehaviorFullScreenPrimary
+                do {
+                    try nsWindow.setValue(newBehavior, forKey: "collectionBehavior")
+                    print("Window collection behavior updated to prevent full-screen")
+                } catch {
+                    print("Failed to set collection behavior: \(error)")
+                }
+            } else {
+                print("Failed to get current collection behavior")
+            }
         }
     }
 }
