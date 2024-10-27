@@ -105,5 +105,5 @@ struct AppSettingsData: Codable {
     var rootWorkDir = true
     var noKMOnInput = false
     var enableScrollWheel = true
-    var autoResize = false
+    var autoResize = true
 }
