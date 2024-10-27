@@ -185,26 +185,32 @@ extension UIScreen {
 
     @objc public func makeWindowResizable(_ window: UIWindow) {
         DispatchQueue.main.async {
-            guard let nsWindow = window.value(forKey: "nsWindow") as? NSObject else {
+            guard let nsWindow = window.nsWindow else {
                 print("Failed to get NSWindow")
                 return
             }
             
-            let styleMask = nsWindow.value(forKey: "styleMask") as? UInt ?? 0
-            let newStyleMask = styleMask | (1 << 3) // NSWindowStyleMaskResizable
-            nsWindow.setValue(newStyleMask, forKey: "styleMask")
+            print("Attempting to make window resizable")
             
+            // Set style mask
+            let styleMask: UInt = 15 // NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable
+            nsWindow.perform(Selector(("setStyleMask:")), with: NSNumber(value: styleMask))
+            
+            // Set min and max sizes
             let minSize = CGSize(width: 300, height: 300)
             let maxSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
-            nsWindow.setValue(minSize, forKey: "minSize")
-            nsWindow.setValue(maxSize, forKey: "maxSize")
+            nsWindow.perform(Selector(("setMinSize:")), with: NSValue(cgSize: minSize))
+            nsWindow.perform(Selector(("setMaxSize:")), with: NSValue(cgSize: maxSize))
             
-            nsWindow.setValue(true, forKey: "movable")
-            nsWindow.setValue(true, forKey: "movableByWindowBackground")
+            // Make window movable
+            nsWindow.perform(Selector(("setMovable:")), with: true)
+            nsWindow.perform(Selector(("setMovableByWindowBackground:")), with: true)
             
-            nsWindow.perform(Selector("makeKeyAndOrderFront:"), with: nil)
+            // Set collection behavior
+            let collectionBehavior: UInt = 128 // NSWindowCollectionBehaviorFullScreenPrimary
+            nsWindow.perform(Selector(("setCollectionBehavior:")), with: NSNumber(value: collectionBehavior))
             
-            print("Window forced to be resizable")
+            print("Window properties set for resizing")
         }
     }
 }
@@ -247,3 +253,4 @@ extension UIWindow {
         return nil
     }
 }
+
