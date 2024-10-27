@@ -21,6 +21,8 @@ public class PlayCover: NSObject {
             // Change the working directory to / just like iOS
             FileManager.default.changeCurrentDirectoryPath("/")
         }
+        
+        PlayScreen.shared.applyAutoResize()
     }
 
     @objc static public func initMenu(menu: NSObject) {
@@ -75,5 +77,9 @@ public class PlayCover: NSObject {
     static func delay(_ delay: Double, closure: @escaping () -> Void) {
         let when = DispatchTime.now() + delay
         DispatchQueue.main.asyncAfter(deadline: when, execute: closure)
+    }
+
+    @objc static public func updateSettings() {
+        PlayScreen.shared.applyAutoResize()
     }
 }

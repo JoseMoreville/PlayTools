@@ -183,6 +183,28 @@ public class PlayScreen: NSObject {
             return rect.toAspectRatioDefault()
     }
 
+    func applyAutoResize() {
+        guard PlaySettings.shared.autoResize || PlaySettings.shared.adaptiveDisplay else { return }
+        
+        let screen = UIScreen.main
+        let screenBounds = screen.bounds
+        let screenScale = screen.scale
+        
+        let newWidth = screenBounds.width * screenScale
+        let newHeight = screenBounds.height * screenScale
+        
+        PlaySettings.shared.windowSizeWidth = newWidth
+        PlaySettings.shared.windowSizeHeight = newHeight
+        
+        // Update the window size
+        if let window = self.window {
+            window.frame = CGRect(x: 0, y: 0, width: newWidth, height: newHeight)
+            window.rootViewController?.view.frame = window.bounds
+        }
+        
+        // Force layout update
+        window?.layoutIfNeeded()
+    }
 }
 
 extension CGFloat {
@@ -224,3 +246,6 @@ extension UIWindow {
         return nil
     }
 }
+
+
+
