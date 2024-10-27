@@ -185,49 +185,43 @@ extension UIScreen {
 
     @objc public func makeWindowResizable(_ window: UIWindow) {
         DispatchQueue.main.async {
-            print("Starting makeWindowResizable")
             guard let nsWindow = window.nsWindow else {
                 print("Failed to get NSWindow")
                 return
             }
             
-            print("NSWindow object: \(nsWindow)")
-            print("Responds to setStyleMask:: \(nsWindow.responds(to: Selector(("setStyleMask:"))))")
-            print("Responds to setMovable:: \(nsWindow.responds(to: Selector(("setMovable:"))))")
+            print("Attempting to make window resizable")
             
-            do {
-                print("Setting style mask")
-                let styleMask: UInt = 15 // NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable
-                nsWindow.perform(Selector(("setStyleMask:")), with: NSNumber(value: styleMask))
-                
-                print("Setting min and max sizes")
-                let minSize = CGSize(width: 300, height: 300)
-                let maxSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
-                nsWindow.perform(Selector(("setMinSize:")), with: NSValue(cgSize: minSize))
-                nsWindow.perform(Selector(("setMaxSize:")), with: NSValue(cgSize: maxSize))
-                
-                print("Making window movable")
-                nsWindow.perform(Selector(("setMovable:")), with: true)
-                nsWindow.perform(Selector(("setMovableByWindowBackground:")), with: true)
-                
-                print("Ensuring window is not constrained")
-                nsWindow.perform(Selector(("setConstrainedByScreenEdges:")), with: false)
-                
-                print("Setting collection behavior")
-                let collectionBehavior: UInt = 128 // NSWindowCollectionBehaviorFullScreenPrimary
-                nsWindow.perform(Selector(("setCollectionBehavior:")), with: NSNumber(value: collectionBehavior))
-                
-                print("Forcing update")
-                nsWindow.perform(Selector(("display")))
-                nsWindow.perform(Selector(("setNeedsDisplay:")), with: true)
-                
-                print("Window properties set for resizing")
-            } catch {
-                print("Error occurred while making window resizable: \(error)")
+            // Set style mask
+            let styleMask: UInt = 15 // NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable
+            nsWindow.perform(Selector(("setStyleMask:")), with: NSNumber(value: styleMask))
+            
+            // Make window movable
+            nsWindow.perform(Selector(("setMovable:")), with: true)
+            nsWindow.perform(Selector(("setMovableByWindowBackground:")), with: true)
+            
+            print("Window properties set for resizing")
+        }
+    }
+
+    @objc public func preventFullScreen(_ window: UIWindow) {
+        DispatchQueue.main.async {
+            guard let nsWindow = window.nsWindow else {
+                print("Failed to get NSWindow")
+                return
             }
+            
+            print("Attempting to prevent full-screen mode")
+            
+            // Prevent full-screen mode
+            let collectionBehavior: UInt = 0 // NSWindowCollectionBehaviorDefault
+            nsWindow.perform(Selector(("setCollectionBehavior:")), with: NSNumber(value: collectionBehavior))
+            
+            print("Window collection behavior set to prevent full-screen")
         }
     }
 }
+
 extension CGFloat {
     var relativeY: CGFloat {
         self / screen.height
