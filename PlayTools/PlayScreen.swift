@@ -138,7 +138,7 @@ extension UIScreen {
             .shared
             .connectedScenes
             .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
-            .first { $0.isKeyWindow }
+            .first(where: { $0.isKeyWindow })
     }
 
     var windowScene: UIWindowScene? {
@@ -204,12 +204,15 @@ extension UIScreen {
                 // Add resizable flag to current style mask
                 let newStyleMask = currentStyleMask | 0x8 // NSWindowStyleMaskResizable
                 
-                do {
-                    try nsWindow.setValue(newStyleMask, forKey: "styleMask")
-                    print("Style mask updated successfully")
-                } catch {
-                    print("Failed to set style mask: \(error)")
-                }
+                nsWindow.setValue(newStyleMask, forKey: "styleMask")
+                print("Style mask updated")
+            } else {
+                print("Failed to get current style mask")
+            }
+            
+            // Make window movable
+            nsWindow.setValue(true, forKey: "movable")
+            nsWindow.setValue(true, forKey: "movableByWindowBackground")
             
             print("Window properties set for resizing")
         }
@@ -226,12 +229,8 @@ extension UIScreen {
             
             if let currentBehavior = nsWindow.value(forKey: "collectionBehavior") as? UInt {
                 let newBehavior = currentBehavior & ~(1 << 7) // Remove NSWindowCollectionBehaviorFullScreenPrimary
-                do {
-                    try nsWindow.setValue(newBehavior, forKey: "collectionBehavior")
-                    print("Window collection behavior updated to prevent full-screen")
-                } catch {
-                    print("Failed to set collection behavior: \(error)")
-                }
+                nsWindow.setValue(newBehavior, forKey: "collectionBehavior")
+                print("Window collection behavior updated to prevent full-screen")
             } else {
                 print("Failed to get current collection behavior")
             }
