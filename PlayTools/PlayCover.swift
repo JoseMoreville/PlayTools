@@ -16,13 +16,12 @@ public class PlayCover: NSObject {
         AKInterface.initialize()
         PlayInput.shared.initialize()
         DiscordIPC.shared.initialize()
-
+        PlayScreen.shared.applyAutoResize()
+        PlayScreen.shared.setupWindowNotifications()
         if PlaySettings.shared.rootWorkDir {
             // Change the working directory to / just like iOS
             FileManager.default.changeCurrentDirectoryPath("/")
         }
-        
-        PlayScreen.shared.applyAutoResize()
     }
 
     @objc static public func initMenu(menu: NSObject) {
@@ -78,8 +77,8 @@ public class PlayCover: NSObject {
         let when = DispatchTime.now() + delay
         DispatchQueue.main.asyncAfter(deadline: when, execute: closure)
     }
-
     @objc static public func updateSettings() {
-        PlayScreen.shared.applyAutoResize()
+    PlayScreen.shared.applyAutoResize()
     }
 }
+

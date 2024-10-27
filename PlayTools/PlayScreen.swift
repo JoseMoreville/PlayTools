@@ -183,28 +183,33 @@ public class PlayScreen: NSObject {
             return rect.toAspectRatioDefault()
     }
 
-    func applyAutoResize() {
-        guard PlaySettings.shared.autoResize || PlaySettings.shared.adaptiveDisplay else { return }
+func applyAutoResize() {
+    guard PlaySettings.shared.autoResize || PlaySettings.shared.adaptiveDisplay else { return }
+    
+    let screen = NSScreen.main ?? NSScreen.screens.first!
+    let screenFrame = screen.frame
+    let visibleFrame = screen.visibleFrame
+    
+    let newWidth = visibleFrame.width
+    let newHeight = visibleFrame.height
+    
+    PlaySettings.shared.windowSizeWidth = newWidth
+    PlaySettings.shared.windowSizeHeight = newHeight
+    
+    if let window = NSApplication.shared.windows.first {
+        window.setFrame(visibleFrame, display: true, animate: false)
+        window.styleMask.insert(.resizable)
+        window.collectionBehavior = [.fullScreenPrimary, .managed]
         
-        let screen = UIScreen.main
-        let screenBounds = screen.bounds
-        let screenScale = screen.scale
-        
-        let newWidth = screenBounds.width * screenScale
-        let newHeight = screenBounds.height * screenScale
-        
-        PlaySettings.shared.windowSizeWidth = newWidth
-        PlaySettings.shared.windowSizeHeight = newHeight
-        
-        // Update the window size
-        if let window = self.window {
-            window.frame = CGRect(x: 0, y: 0, width: newWidth, height: newHeight)
-            window.rootViewController?.view.frame = window.bounds
+        if let contentView = window.contentView {
+            contentView.frame = CGRect(origin: .zero, size: visibleFrame.size)
+            contentView.autoresizingMask = [.width, .height]
         }
-        
-        // Force layout update
-        window?.layoutIfNeeded()
     }
+    
+    // Force layout update
+    NSApplication.shared.windows.first?.layoutIfNeeded()
+}
 }
 
 extension CGFloat {
@@ -247,5 +252,15 @@ extension UIWindow {
     }
 }
 
+public func setupWindowNotifications() {
+    NotificationCenter.default.addObserver(
+        self,
+        selector: #selector(windowDidChangeScreen),
+        name: NSWindow.didChangeScreenNotification,
+        object: nil
+    )
+}
 
-
+@objc private func windowDidChangeScreen(_ notification: Notification) {
+    applyAutoResize()
+}
