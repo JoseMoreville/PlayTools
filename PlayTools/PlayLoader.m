@@ -189,8 +189,10 @@ DYLD_INTERPOSE(pt_SecItemDelete, SecItemDelete)
     // Call original implementation
     [self swizzled_makeKeyAndVisible];
     
-    // Make window resizable using PlayScreen
-    [[PlayScreen shared] makeWindowResizable:self];
+    // Add a delay before making the window resizable
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[PlayScreen shared] makeWindowResizable:self];
+    });
 }
 
 @end
@@ -215,3 +217,4 @@ static void __attribute__((constructor)) initialize(void) {
 }
 
 @end
+
