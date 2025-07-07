@@ -250,6 +250,49 @@ static void __attribute__((constructor)) initialize(void) {
     if (ue_status == 2) {
         [PlayKeychain debugLogger: [NSString stringWithFormat:@"UnrealEngine Hooked"]];
     }
+
+    // --- Geometry debug -----------------------------------------
+    // Helper to stringify CGRect without needing AppKit's NSStringFromRect
+    NSString * (^rectStr)(CGRect) = ^NSString * (CGRect r) {
+        return [NSString stringWithFormat:@"{{%.0f, %.0f}, {%.0f, %.0f}}", r.origin.x, r.origin.y, r.size.width, r.size.height];
+    };
+
+    void (^logWindowGeometry)(id) = ^(id win) {
+        if (!win) { return; }
+
+        // Use KVC to avoid AppKit headers
+        id screen = [win valueForKey:@"screen"];
+        CGRect screenFrame = screen ? [[screen valueForKey:@"frame"] CGRectValue] : CGRectZero;
+        CGRect visibleFrame = screen ? [[screen valueForKey:@"visibleFrame"] CGRectValue] : CGRectZero;
+
+        CGRect windowFrame = [[win valueForKey:@"frame"] CGRectValue];
+        id contentView = [win valueForKey:@"contentView"];
+        CGRect contentFrame = contentView ? [[contentView valueForKey:@"frame"] CGRectValue] : CGRectZero;
+        CGRect layoutRect = [[win valueForKey:@"contentLayoutRect"] CGRectValue];
+
+        NSString *msg = [NSString stringWithFormat:
+                         @"Screen frame:        %@\nScreen visibleFrame: %@\nWindow frame:        %@\nContent view frame:  %@\nLayout-guide frame:  %@",
+                         rectStr(screenFrame),
+                         rectStr(visibleFrame),
+                         rectStr(windowFrame),
+                         rectStr(contentFrame),
+                         rectStr(layoutRect)];
+
+        [PlayKeychain debugLogger:msg];
+    };
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        id app = [NSClassFromString(@"NSApplication") valueForKey:@"sharedApplication"];
+        NSArray *wins = [app valueForKey:@"windows"];
+        logWindowGeometry(wins.firstObject);
+    });
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"NSWindowDidBecomeKeyNotification"
+                                                      object:nil
+                                                       queue:[NSOperationQueue mainQueue]
+                                                  usingBlock:^(NSNotification * _Nonnull note) {
+        logWindowGeometry(note.object);
+    }];
 }
 
 @end
