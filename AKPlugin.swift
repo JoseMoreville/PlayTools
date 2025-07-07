@@ -32,11 +32,26 @@ class AKPlugin: NSObject, Plugin {
             window.titleVisibility = .hidden
             window.toolbar = nil
             window.title = ""
+            window.hasShadow = false
             NSWindow.allowsAutomaticWindowTabbing = true
 
             // Expand the window to cover the entire main screen while keeping it in the current desktop space.
-            if let mainScreen = NSScreen.main {
-                window.setFrame(mainScreen.frame, display: true)
+            if let targetScreen = window.screen ?? NSScreen.main {
+                window.setFrame(targetScreen.frame, display: true)
+
+                // 1. Ask Catalyst to give the whole width to the content.
+                window.setContentLayoutRect(targetScreen.frame)
+
+                // 2. Tell UIKit that we don't want the layout-guide inset that protects the toolbar / traffic-lights.
+                if let rootVC = window.contentViewController {
+                    rootVC.additionalSafeAreaInsets = .zero
+                }
+            }
+
+            if let win = NSApplication.shared.windows.first {
+                print("Window frame:        \(win.frame)")
+                print("Content view frame:  \(win.contentView?.frame ?? .zero)")
+                print("Layout-guide frame:  \(win.contentLayoutRect)")
             }
         }
 
@@ -51,10 +66,11 @@ class AKPlugin: NSObject, Plugin {
             win.titleVisibility = .hidden
             win.toolbar = nil
             win.title = ""
+            win.hasShadow = false
 
             // Ensure any new window we spawn also takes the full main screen size.
-            if let mainScreen = NSScreen.main {
-                win.setFrame(mainScreen.frame, display: true)
+            if let targetScreen = win.screen ?? NSScreen.main {
+                win.setFrame(targetScreen.frame, display: true)
             }
         }
     }
