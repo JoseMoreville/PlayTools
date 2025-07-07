@@ -33,6 +33,11 @@ class AKPlugin: NSObject, Plugin {
             window.toolbar = nil
             window.title = ""
             NSWindow.allowsAutomaticWindowTabbing = true
+
+            // Expand the window to cover the entire main screen while keeping it in the current desktop space.
+            if let mainScreen = NSScreen.main {
+                window.setFrame(mainScreen.frame, display: true)
+            }
         }
 
         // Apply the same appearance rules to any subsequent windows that may be created
@@ -46,6 +51,11 @@ class AKPlugin: NSObject, Plugin {
             win.titleVisibility = .hidden
             win.toolbar = nil
             win.title = ""
+
+            // Ensure any new window we spawn also takes the full main screen size.
+            if let mainScreen = NSScreen.main {
+                win.setFrame(mainScreen.frame, display: true)
+            }
         }
     }
 
