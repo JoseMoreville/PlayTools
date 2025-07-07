@@ -39,13 +39,13 @@ class AKPlugin: NSObject, Plugin {
             if let targetScreen = window.screen ?? NSScreen.main {
                 window.setFrame(targetScreen.frame, display: true)
 
-                // 1. Ask Catalyst to give the whole width to the content.
-                window.setContentLayoutRect(targetScreen.frame)
-
-                // 2. Tell UIKit that we don't want the layout-guide inset that protects the toolbar / traffic-lights.
-                if let rootVC = window.contentViewController {
-                    rootVC.additionalSafeAreaInsets = .zero
-                }
+//                // 1. Ask Catalyst to give the whole width to the content.
+//                window.setContentLayoutRect(targetScreen.frame)
+//
+//                // 2. Tell UIKit that we don't want the layout-guide inset that protects the toolbar / traffic-lights.
+//                if let rootVC = window.contentViewController {
+//                    rootVC.additionalSafeAreaInsets = .zero
+//                }
             }
 
             if let win = NSApplication.shared.windows.first {
