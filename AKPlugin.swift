@@ -38,14 +38,6 @@ class AKPlugin: NSObject, Plugin {
             // Expand the window to cover the entire main screen while keeping it in the current desktop space.
             if let targetScreen = window.screen ?? NSScreen.main {
                 window.setFrame(targetScreen.frame, display: true)
-
-//                // 1. Ask Catalyst to give the whole width to the content.
-//                window.setContentLayoutRect(targetScreen.frame)
-//
-//                // 2. Tell UIKit that we don't want the layout-guide inset that protects the toolbar / traffic-lights.
-//                if let rootVC = window.contentViewController {
-//                    rootVC.additionalSafeAreaInsets = .zero
-//                }
             }
 
             if let win = NSApplication.shared.windows.first {

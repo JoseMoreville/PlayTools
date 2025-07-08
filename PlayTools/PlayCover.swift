@@ -23,6 +23,16 @@ public class PlayCover: NSObject {
             // Change the working directory to / just like iOS
             FileManager.default.changeCurrentDirectoryPath("/")
         }
+
+        // Ensure Catalyst allows our requested window size.
+        PlayCover.shared.PT_applySceneSizeRestrictions()
+
+        // Re-apply whenever a scene becomes active (e.g. new window)
+        NotificationCenter.default.addObserver(forName: UIScene.didActivateNotification,
+                                               object: nil,
+                                               queue: .main) { _ in
+            PlayCover.shared.PT_applySceneSizeRestrictions()
+        }
     }
 
     @objc static public func initMenu(menu: NSObject) {
@@ -77,5 +87,19 @@ public class PlayCover: NSObject {
     static func delay(_ delay: Double, closure: @escaping () -> Void) {
         let when = DispatchTime.now() + delay
         DispatchQueue.main.asyncAfter(deadline: when, execute: closure)
+    }
+
+    public func PT_applySceneSizeRestrictions() {
+        DispatchQueue.main.async {
+            guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let restrictions = scene.sizeRestrictions else { return }
+
+            // Use the target window size from PlaySettings (user preference)
+            let targetSize = CGSize(width: PlaySettings.shared.windowSizeWidth,
+                                    height: PlaySettings.shared.windowSizeHeight)
+
+            restrictions.minimumSize = targetSize
+            restrictions.maximumSize = targetSize
+        }
     }
 }
