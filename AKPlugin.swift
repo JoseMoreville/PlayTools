@@ -35,9 +35,22 @@ class AKPlugin: NSObject, Plugin {
             window.hasShadow = false
             NSWindow.allowsAutomaticWindowTabbing = true
 
-            // Expand the window to cover the entire main screen while keeping it in the current desktop space.
+            // Set the window frame to match the target screen size
             if let targetScreen = window.screen ?? NSScreen.main {
-                window.setFrame(targetScreen.frame, display: true)
+                let targetFrame = NSRect(x: 0, y: 0, width: 1920, height: 1080)
+                window.setFrame(targetFrame, display: true)
+                
+                // Ensure content view fills the entire window
+                window.contentView?.frame = window.frame
+                
+                // Set minimum and maximum size to lock the window dimensions
+                window.minSize = NSSize(width: 1920, height: 1080)
+                window.maxSize = NSSize(width: 1920, height: 1080)
+                window.contentView?.frame = window.frame
+                window.contentView?.wantsLayer = true
+                window.contentView?.layer?.backgroundColor = NSColor.red.cgColor
+                window.contentView?.layer?.borderWidth = 1
+                window.contentView?.layer?.borderColor = NSColor.black.cgColor
             }
 
             if let win = NSApplication.shared.windows.first {
@@ -60,10 +73,14 @@ class AKPlugin: NSObject, Plugin {
             win.title = ""
             win.hasShadow = false
 
-            // Ensure any new window we spawn also takes the full main screen size.
-            if let targetScreen = win.screen ?? NSScreen.main {
-                win.setFrame(targetScreen.frame, display: true)
-            }
+            // Apply same frame settings to new windows
+            let targetFrame = NSRect(x: 0, y: 0, width: 1920, height: 1080)
+            win.setFrame(targetFrame, display: true)
+            win.contentView?.frame = win.frame
+            
+            // Set minimum and maximum size to lock the window dimensions
+            win.minSize = NSSize(width: 1920, height: 1080)
+            win.maxSize = NSSize(width: 1920, height: 1080)
         }
     }
 
