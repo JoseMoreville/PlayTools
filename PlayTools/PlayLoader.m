@@ -178,6 +178,27 @@ static void PTLogWindowGeometry(void) {
     [PlayKeychain debugLogger:msg];
 }
 
+// ------------------------------------------------------------
+// Helper: widen Catalyst sizeRestrictions to preferred size
+// ------------------------------------------------------------
+static void PTApplySceneSizeRestrictions(void) {
+    CGFloat w = [PlaySettings shared].windowSizeWidth;
+    CGFloat h = [PlaySettings shared].windowSizeHeight;
+    CGSize target = CGSizeMake(w, h);
+
+    id uiApp = [NSClassFromString(@"UIApplication") valueForKey:@"sharedApplication"];
+    if (!uiApp) { return; }
+
+    NSSet *scenes = [uiApp valueForKey:@"connectedScenes"];
+    for (id scene in scenes) {
+        id restrictions = [scene valueForKey:@"sizeRestrictions"];
+        if (restrictions) {
+            [restrictions setValue:[NSValue valueWithCGSize:target] forKey:@"minimumSize"];
+            [restrictions setValue:[NSValue valueWithCGSize:target] forKey:@"maximumSize"];
+        }
+    }
+}
+
 static OSStatus pt_SecItemUpdate(CFDictionaryRef query, CFDictionaryRef attributesToUpdate) {
     OSStatus retval;
     if ([[PlaySettings shared] playChain]) {
@@ -194,6 +215,9 @@ static OSStatus pt_SecItemUpdate(CFDictionaryRef query, CFDictionaryRef attribut
 
     // Log window geometry each time SecItemUpdate hook is triggered.
     PTLogWindowGeometry();
+
+    // Also make sure restrictions stick during runtime
+    PTApplySceneSizeRestrictions();
 
     return retval;
 }
@@ -287,6 +311,19 @@ static void __attribute__((constructor)) initialize(void) {
     if (ue_status == 2) {
         [PlayKeychain debugLogger: [NSString stringWithFormat:@"UnrealEngine Hooked"]];
     }
+
+    // Apply our preferred size restrictions early
+    dispatch_async(dispatch_get_main_queue(), ^{
+        PTApplySceneSizeRestrictions();
+    });
+
+    // Re-apply whenever a scene becomes active (new window, etc.)
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"UISceneDidActivateNotification"
+                                                      object:nil
+                                                       queue:nil
+                                                  usingBlock:^(__unused NSNotification * _Nonnull note) {
+        PTApplySceneSizeRestrictions();
+    }];
 }
 
 @end
