@@ -146,6 +146,19 @@ class AKPlugin: NSObject, Plugin {
         }
     }
 
+    private func configureWindow(_ window: NSWindow) {
+        window.styleMask.insert([.resizable, .fullSizeContentView])
+        window.collectionBehavior = [.fullScreenPrimary, .managed, .participatesInCycle]
+
+        window.isMovable = true
+        window.isMovableByWindowBackground = true
+        window.titlebarAppearsTransparent = true
+        window.titleVisibility = .hidden
+        window.toolbar = nil
+        window.title = ""
+        NSWindow.allowsAutomaticWindowTabbing = true
+    }
+
     var screenCount: Int {
         NSScreen.screens.count
     }
