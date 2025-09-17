@@ -6,10 +6,24 @@ import Foundation
 import UIKit
 
 let screen = PlayScreen.shared
-let isInvertFixEnabled = PlaySettings.shared.inverseScreenValues && PlaySettings.shared.adaptiveDisplay
-let mainScreenWidth =  !isInvertFixEnabled ? PlaySettings.shared.windowSizeWidth : PlaySettings.shared.windowSizeHeight
-let mainScreenHeight = !isInvertFixEnabled ? PlaySettings.shared.windowSizeHeight : PlaySettings.shared.windowSizeWidth
-let customScaler = PlaySettings.shared.customScaler
+private var isInvertFixEnabled: Bool {
+    let settings = PlaySettings.shared
+    return settings.inverseScreenValues && settings.adaptiveDisplay
+}
+
+private var mainScreenWidth: CGFloat {
+    let settings = PlaySettings.shared
+    return !isInvertFixEnabled ? settings.windowSizeWidth : settings.windowSizeHeight
+}
+
+private var mainScreenHeight: CGFloat {
+    let settings = PlaySettings.shared
+    return !isInvertFixEnabled ? settings.windowSizeHeight : settings.windowSizeWidth
+}
+
+private var customScaler: Double {
+    PlaySettings.shared.customScaler
+}
 
 extension CGSize {
     func aspectRatio() -> CGFloat {
@@ -90,6 +104,7 @@ public class PlayScreen: NSObject {
     }
 
     @objc public static func bounds(_ rect: CGRect) -> CGRect {
+        updateStoredWindowSize(from: rect, isReversed: false)
         return rect.toAspectRatio()
     }
 
@@ -169,6 +184,7 @@ public class PlayScreen: NSObject {
         return rect.toAspectRatioDefault()
     }
     @objc public static func boundsDefault(_ rect: CGRect) -> CGRect {
+        updateStoredWindowSize(from: rect, isReversed: false)
         return rect.toAspectRatioDefault()
     }
 
@@ -183,6 +199,15 @@ public class PlayScreen: NSObject {
             return rect.toAspectRatioDefault()
     }
 
+}
+
+private extension PlayScreen {
+    static func updateStoredWindowSize(from rect: CGRect, isReversed: Bool) {
+        guard rect.width.isFinite, rect.height.isFinite, rect.width > 0, rect.height > 0 else { return }
+        let width = isReversed ? rect.height : rect.width
+        let height = isReversed ? rect.width : rect.height
+        PlaySettings.shared.persistWindowSize(width: width, height: height, isInverted: isInvertFixEnabled)
+    }
 }
 
 extension CGFloat {

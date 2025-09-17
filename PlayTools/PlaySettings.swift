@@ -1,3 +1,4 @@
+import Dispatch
 import Foundation
 import UIKit
 
@@ -9,6 +10,10 @@ let settings = PlaySettings.shared
     let bundleIdentifier = Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String ?? ""
     let settingsUrl: URL
     var settingsData: AppSettingsData
+    private var cachedWindowSizeWidth: CGFloat
+    private var cachedWindowSizeHeight: CGFloat
+    private let windowSizeUpdateTolerance: CGFloat = 0.5
+    private var pendingWindowSizeSave: DispatchWorkItem?
 
     override init() {
         settingsUrl = URL(fileURLWithPath: "/Users/\(NSUserName())/Library/Containers/io.playcover.PlayCover")
@@ -21,6 +26,9 @@ let settings = PlaySettings.shared
             settingsData = AppSettingsData()
             print("[PlayTools] PlaySettings decode failed.\n%@")
         }
+        cachedWindowSizeWidth = CGFloat(settingsData.windowWidth)
+        cachedWindowSizeHeight = CGFloat(settingsData.windowHeight)
+        super.init()
     }
 
     lazy var discordActivity = settingsData.discordActivity
@@ -33,9 +41,23 @@ let settings = PlaySettings.shared
 
     @objc lazy var bypass = settingsData.bypass
 
-    @objc lazy var windowSizeHeight = CGFloat(settingsData.windowHeight)
+    @objc var windowSizeHeight: CGFloat {
+        get { cachedWindowSizeHeight }
+        set {
+            if updateWindowHeightIfNeeded(newValue) {
+                scheduleWindowSizeSave()
+            }
+        }
+    }
 
-    @objc lazy var windowSizeWidth = CGFloat(settingsData.windowWidth)
+    @objc var windowSizeWidth: CGFloat {
+        get { cachedWindowSizeWidth }
+        set {
+            if updateWindowWidthIfNeeded(newValue) {
+                scheduleWindowSizeSave()
+            }
+        }
+    }
 
     @objc lazy var inverseScreenValues = settingsData.inverseScreenValues
 
@@ -85,6 +107,57 @@ let settings = PlaySettings.shared
     @objc lazy var hideTitleBar = settingsData.hideTitleBar
 
     @objc lazy var checkMicPermissionSync = settingsData.checkMicPermissionSync
+
+    func persistWindowSize(width: CGFloat, height: CGFloat, isInverted: Bool) {
+        let targetWidth = isInverted ? height : width
+        let targetHeight = isInverted ? width : height
+
+        let didUpdateWidth = updateWindowWidthIfNeeded(targetWidth)
+        let didUpdateHeight = updateWindowHeightIfNeeded(targetHeight)
+
+        if didUpdateWidth || didUpdateHeight {
+            scheduleWindowSizeSave()
+        }
+    }
+
+    private func updateWindowWidthIfNeeded(_ value: CGFloat) -> Bool {
+        let normalized = normalizedWindowValue(value)
+        guard abs(cachedWindowSizeWidth - normalized) > windowSizeUpdateTolerance else { return false }
+        cachedWindowSizeWidth = normalized
+        settingsData.windowWidth = Int(normalized)
+        return true
+    }
+
+    private func updateWindowHeightIfNeeded(_ value: CGFloat) -> Bool {
+        let normalized = normalizedWindowValue(value)
+        guard abs(cachedWindowSizeHeight - normalized) > windowSizeUpdateTolerance else { return false }
+        cachedWindowSizeHeight = normalized
+        settingsData.windowHeight = Int(normalized)
+        return true
+    }
+
+    private func normalizedWindowValue(_ value: CGFloat) -> CGFloat {
+        let rounded = max(1, Int(round(value)))
+        return CGFloat(rounded)
+    }
+
+    private func scheduleWindowSizeSave() {
+        pendingWindowSizeSave?.cancel()
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.writeSettingsData()
+        }
+        pendingWindowSizeSave = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: workItem)
+    }
+
+    private func writeSettingsData() {
+        do {
+            let encoded = try PropertyListEncoder().encode(settingsData)
+            try encoded.write(to: settingsUrl)
+        } catch {
+            print("[PlayTools] PlaySettings save failed: \(error)")
+        }
+    }
 }
 
 struct AppSettingsData: Codable {
