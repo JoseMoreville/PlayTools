@@ -7,12 +7,12 @@ import UIKit
 
 let screen = PlayScreen.shared
 
-fileprivate var isInvertFixEnabled: Bool {
+private var isInvertFixEnabled: Bool {
     let settings = PlaySettings.shared
     return settings.inverseScreenValues && settings.adaptiveDisplay
 }
 
-fileprivate var customScaler: Double {
+private var customScaler: Double {
     PlaySettings.shared.customScaler
 }
 
@@ -23,7 +23,7 @@ private var currentWindowFrame: CGRect? {
     return frame
 }
 
-fileprivate var mainScreenSize: CGSize {
+private var mainScreenSize: CGSize {
     let settings = PlaySettings.shared
 
     if let frame = currentWindowFrame {
@@ -47,8 +47,8 @@ fileprivate var mainScreenSize: CGSize {
     }
 }
 
-fileprivate var mainScreenWidth: CGFloat { mainScreenSize.width }
-fileprivate var mainScreenHeight: CGFloat { mainScreenSize.height }
+private var mainScreenWidth: CGFloat { mainScreenSize.width }
+private var mainScreenHeight: CGFloat { mainScreenSize.height }
 
 extension CGSize {
     func aspectRatio() -> CGFloat {
