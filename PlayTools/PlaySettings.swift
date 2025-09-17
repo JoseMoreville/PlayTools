@@ -31,8 +31,6 @@ let settings = PlaySettings.shared
         super.init()
     }
 
-    lazy var discordActivity = settingsData.discordActivity
-
     lazy var keymapping = settingsData.keymapping
 
     lazy var notch = settingsData.notch
@@ -173,7 +171,6 @@ struct AppSettingsData: Codable {
     var aspectRatio = 1
     var notch = false
     var bypass = false
-    var discordActivity = DiscordActivity()
     var version = "2.0.0"
     var playChain = false
     var playChainDebugging = false
