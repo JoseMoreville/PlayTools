@@ -33,25 +33,9 @@ let settings = PlaySettings.shared
 
     @objc lazy var bypass = settingsData.bypass
 
-    private var needsWindowSizePersistence = false
+    @objc lazy var windowSizeHeight = CGFloat(settingsData.windowHeight)
 
-    @objc dynamic var windowSizeHeight: CGFloat {
-        get { CGFloat(settingsData.windowHeight) }
-        set {
-            if updateWindowSize(width: nil, height: newValue) {
-                needsWindowSizePersistence = true
-            }
-        }
-    }
-
-    @objc dynamic var windowSizeWidth: CGFloat {
-        get { CGFloat(settingsData.windowWidth) }
-        set {
-            if updateWindowSize(width: newValue, height: nil) {
-                needsWindowSizePersistence = true
-            }
-        }
-    }
+    @objc lazy var windowSizeWidth = CGFloat(settingsData.windowWidth)
 
     @objc lazy var inverseScreenValues = settingsData.inverseScreenValues
 
@@ -101,65 +85,6 @@ let settings = PlaySettings.shared
     @objc lazy var hideTitleBar = settingsData.hideTitleBar
 
     @objc lazy var checkMicPermissionSync = settingsData.checkMicPermissionSync
-
-    @objc func cacheWindowSize(width: CGFloat, height: CGFloat) {
-        if updateWindowSize(width: width, height: height) {
-            needsWindowSizePersistence = true
-        }
-    }
-
-    @objc func persistWindowSize(width: CGFloat, height: CGFloat) {
-        if updateWindowSize(width: width, height: height) {
-            needsWindowSizePersistence = true
-        }
-        persistWindowSizeIfNeeded()
-    }
-
-    @objc func persistWindowSizeIfNeeded() {
-        guard needsWindowSizePersistence else { return }
-        needsWindowSizePersistence = false
-        persistSettings()
-    }
-
-    @discardableResult
-    private func updateWindowSize(width: CGFloat?, height: CGFloat?) -> Bool {
-        var didChange = false
-
-        if let width { didChange = updateWidth(width) || didChange }
-        if let height { didChange = updateHeight(height) || didChange }
-
-        return didChange
-    }
-
-    private func updateWidth(_ value: CGFloat) -> Bool {
-        let normalized = normalizedDimension(from: value)
-        guard settingsData.windowWidth != normalized else { return false }
-        settingsData.windowWidth = normalized
-        return true
-    }
-
-    private func updateHeight(_ value: CGFloat) -> Bool {
-        let normalized = normalizedDimension(from: value)
-        guard settingsData.windowHeight != normalized else { return false }
-        settingsData.windowHeight = normalized
-        return true
-    }
-
-    private func normalizedDimension(from value: CGFloat) -> Int {
-        let clamped = max(value, 1)
-        return Int(clamped.rounded())
-    }
-
-    private func persistSettings() {
-        let encoder = PropertyListEncoder()
-        encoder.outputFormat = .binary
-        do {
-            let data = try encoder.encode(settingsData)
-            try data.write(to: settingsUrl, options: .atomic)
-        } catch {
-            print("[PlayTools] Failed to persist PlaySettings: \(error)")
-        }
-    }
 }
 
 struct AppSettingsData: Codable {
