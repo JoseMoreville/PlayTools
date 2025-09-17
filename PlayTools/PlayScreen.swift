@@ -13,8 +13,7 @@ private var isInvertFixEnabled: Bool {
     return settings.inverseScreenValues && settings.adaptiveDisplay
 }
 
-
-private var customScaler: Double {
+fileprivate var customScaler: Double {
     PlaySettings.shared.customScaler
 }
 
@@ -35,7 +34,6 @@ private var mainScreenSize: CGSize {
         settings.cacheWindowSize(width: width, height: height)
         settings.persistWindowSizeIfNeeded()
 
-
         if isInvertFixEnabled {
             return CGSize(width: height, height: width)
         } else {
@@ -52,9 +50,9 @@ private var mainScreenSize: CGSize {
     }
 }
 
-
 private var mainScreenWidth: CGFloat { mainScreenSize.width }
 private var mainScreenHeight: CGFloat { mainScreenSize.height }
+
 
 extension CGSize {
     func aspectRatio() -> CGFloat {

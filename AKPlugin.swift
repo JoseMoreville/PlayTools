@@ -14,6 +14,41 @@ private struct AKAppSettingsData: Codable {
     var hideTitleBar: Bool?
 }
 
+private struct WindowSize: Equatable {
+    let width: Int
+    let height: Int
+
+    init(width: Int, height: Int) {
+        self.width = width
+        self.height = height
+    }
+
+    init?(frame: CGRect) {
+        guard frame.width > 0, frame.height > 0 else { return nil }
+        let normalizedWidth = Int(max(frame.width, 1).rounded())
+        let normalizedHeight = Int(max(frame.height, 1).rounded())
+        self.init(width: normalizedWidth, height: normalizedHeight)
+    }
+
+    init?(dictionary: [String: Any]) {
+        guard let widthValue = WindowSize.extractIntValue(forKey: "windowWidth", from: dictionary),
+              let heightValue = WindowSize.extractIntValue(forKey: "windowHeight", from: dictionary) else {
+            return nil
+        }
+        self.init(width: widthValue, height: heightValue)
+    }
+
+    private static func extractIntValue(forKey key: String, from dictionary: [String: Any]) -> Int? {
+        if let number = dictionary[key] as? NSNumber {
+            return number.intValue
+        }
+        if let stringValue = dictionary[key] as? String, let intValue = Int(stringValue) {
+            return intValue
+        }
+        return dictionary[key] as? Int
+    }
+}
+
 class AKPlugin: NSObject, Plugin {
     private static let appSettingsURL: URL = {
         let bundleIdentifier = Bundle.main.bundleIdentifier ?? ""
@@ -21,6 +56,34 @@ class AKPlugin: NSObject, Plugin {
             .appendingPathComponent("App Settings")
             .appendingPathComponent("\(bundleIdentifier).plist")
     }()
+
+    private static var cachedWindowSize: WindowSize? = {
+        guard let dictionary = loadAppSettingsDictionary() else { return nil }
+        return WindowSize(dictionary: dictionary)
+    }()
+
+    private static func loadAppSettingsDictionary() -> [String: Any]? {
+        guard let data = try? Data(contentsOf: appSettingsURL) else { return nil }
+        return (try? PropertyListSerialization.propertyList(from: data, options: [], format: nil)) as? [String: Any]
+    }
+
+    @discardableResult
+    private static func persistAppSettingsDictionary(_ dictionary: [String: Any]) -> Bool {
+        do {
+            let data = try PropertyListSerialization.data(fromPropertyList: dictionary, format: .binary, options: 0)
+            try data.write(to: appSettingsURL, options: .atomic)
+            return true
+        } catch {
+            print("[PlayTools] Failed to persist PlaySettings from plugin: \(error)")
+            return false
+        }
+    }
+
+    private weak var primaryWindow: NSWindow?
+    private var pendingWindowSize: WindowSize?
+    private var resizeDebounceWorkItem: DispatchWorkItem?
+    private var resizeObserver: NSObjectProtocol?
+    private var liveResizeObserver: NSObjectProtocol?
 
     required override init() {
         super.init()
@@ -36,6 +99,50 @@ class AKPlugin: NSObject, Plugin {
             queue: .main) { [weak self] notif in
             guard let self, let win = notif.object as? NSWindow else { return }
             self.configureWindow(win)
+        }
+
+        resizeObserver = NotificationCenter.default.addObserver(
+            forName: NSWindow.didResizeNotification,
+            object: nil,
+            queue: .main) { [weak self] notif in
+            guard let self, let window = notif.object as? NSWindow else { return }
+            self.handleWindowDidResize(window)
+        }
+
+        liveResizeObserver = NotificationCenter.default.addObserver(
+            forName: NSWindow.didEndLiveResizeNotification,
+            object: nil,
+            queue: .main) { [weak self] notif in
+            guard let self, let window = notif.object as? NSWindow else { return }
+            self.persistPendingWindowSize(for: window)
+        }
+    }
+
+    deinit {
+        if let observer = resizeObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        if let observer = liveResizeObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        resizeDebounceWorkItem?.cancel()
+        persistPendingWindowSize()
+    }
+
+    private func configureWindow(_ window: NSWindow) {
+        window.styleMask.insert([.resizable, .fullSizeContentView])
+        window.collectionBehavior = [.fullScreenPrimary, .managed, .participatesInCycle]
+
+        window.isMovable = true
+        window.isMovableByWindowBackground = true
+        window.titlebarAppearsTransparent = true
+        window.titleVisibility = .hidden
+        window.toolbar = nil
+        window.title = ""
+        NSWindow.allowsAutomaticWindowTabbing = true
+
+        if shouldTrack(window: window, allowAssignment: true) {
+            updateTrackedWindowSize(using: window, persistImmediately: true)
         }
     }
 
@@ -277,4 +384,70 @@ class AKPlugin: NSObject, Plugin {
         }
         return decoded.hideTitleBar ?? false
     }()
+
+    private func handleWindowDidResize(_ window: NSWindow) {
+        guard shouldTrack(window: window, allowAssignment: primaryWindow == nil) else { return }
+        scheduleWindowSizePersistence(for: window)
+    }
+
+    private func shouldTrack(window: NSWindow, allowAssignment: Bool) -> Bool {
+        if let tracked = primaryWindow {
+            return tracked === window
+        }
+        if allowAssignment {
+            primaryWindow = window
+            return true
+        }
+        return false
+    }
+
+    private func updateTrackedWindowSize(using window: NSWindow, persistImmediately: Bool) {
+        guard let size = WindowSize(frame: window.frame) else { return }
+        pendingWindowSize = size
+        if persistImmediately {
+            persistPendingWindowSize()
+        } else {
+            scheduleFlushWorkItem()
+        }
+    }
+
+    private func scheduleWindowSizePersistence(for window: NSWindow) {
+        guard let size = WindowSize(frame: window.frame) else { return }
+        pendingWindowSize = size
+        scheduleFlushWorkItem()
+    }
+
+    private func scheduleFlushWorkItem() {
+        resizeDebounceWorkItem?.cancel()
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.persistPendingWindowSize()
+        }
+        resizeDebounceWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: workItem)
+    }
+
+    private func persistPendingWindowSize(for window: NSWindow? = nil) {
+        if let window {
+            guard shouldTrack(window: window, allowAssignment: primaryWindow == nil) else { return }
+            if let size = WindowSize(frame: window.frame) {
+                pendingWindowSize = size
+            }
+        }
+
+        guard let size = pendingWindowSize else { return }
+        pendingWindowSize = nil
+        resizeDebounceWorkItem?.cancel()
+        resizeDebounceWorkItem = nil
+
+        if size == Self.cachedWindowSize {
+            return
+        }
+
+        var dictionary = Self.loadAppSettingsDictionary() ?? [:]
+        dictionary["windowWidth"] = size.width
+        dictionary["windowHeight"] = size.height
+        if Self.persistAppSettingsDictionary(dictionary) {
+            Self.cachedWindowSize = size
+        }
+    }
 }

@@ -51,7 +51,6 @@ let settings = PlaySettings.shared
                 needsWindowSizePersistence = true
             }
         }
-
     }
 
     @objc lazy var inverseScreenValues = settingsData.inverseScreenValues
