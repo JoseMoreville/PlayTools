@@ -33,14 +33,25 @@ let settings = PlaySettings.shared
 
     @objc lazy var bypass = settingsData.bypass
 
+    private var needsWindowSizePersistence = false
+
     @objc dynamic var windowSizeHeight: CGFloat {
         get { CGFloat(settingsData.windowHeight) }
-        set { updateWindowSize(width: nil, height: newValue, persist: false) }
+        set {
+            if updateWindowSize(width: nil, height: newValue) {
+                needsWindowSizePersistence = true
+            }
+        }
     }
 
     @objc dynamic var windowSizeWidth: CGFloat {
         get { CGFloat(settingsData.windowWidth) }
-        set { updateWindowSize(width: newValue, height: nil, persist: false) }
+        set {
+            if updateWindowSize(width: newValue, height: nil) {
+                needsWindowSizePersistence = true
+            }
+        }
+
     }
 
     @objc lazy var inverseScreenValues = settingsData.inverseScreenValues
@@ -93,22 +104,32 @@ let settings = PlaySettings.shared
     @objc lazy var checkMicPermissionSync = settingsData.checkMicPermissionSync
 
     @objc func cacheWindowSize(width: CGFloat, height: CGFloat) {
-        updateWindowSize(width: width, height: height, persist: false)
+        if updateWindowSize(width: width, height: height) {
+            needsWindowSizePersistence = true
+        }
     }
 
     @objc func persistWindowSize(width: CGFloat, height: CGFloat) {
-        updateWindowSize(width: width, height: height, persist: true)
+        if updateWindowSize(width: width, height: height) {
+            needsWindowSizePersistence = true
+        }
+        persistWindowSizeIfNeeded()
     }
 
-    private func updateWindowSize(width: CGFloat?, height: CGFloat?, persist: Bool) {
+    @objc func persistWindowSizeIfNeeded() {
+        guard needsWindowSizePersistence else { return }
+        needsWindowSizePersistence = false
+        persistSettings()
+    }
+
+    @discardableResult
+    private func updateWindowSize(width: CGFloat?, height: CGFloat?) -> Bool {
         var didChange = false
 
         if let width { didChange = updateWidth(width) || didChange }
         if let height { didChange = updateHeight(height) || didChange }
 
-        if persist, didChange {
-            persistSettings()
-        }
+        return didChange
     }
 
     private func updateWidth(_ value: CGFloat) -> Bool {

@@ -8,9 +8,11 @@ import UIKit
 let screen = PlayScreen.shared
 
 private var isInvertFixEnabled: Bool {
+
     let settings = PlaySettings.shared
     return settings.inverseScreenValues && settings.adaptiveDisplay
 }
+
 
 private var customScaler: Double {
     PlaySettings.shared.customScaler
@@ -24,12 +26,15 @@ private var currentWindowFrame: CGRect? {
 }
 
 private var mainScreenSize: CGSize {
+
     let settings = PlaySettings.shared
 
     if let frame = currentWindowFrame {
         let width = frame.width
         let height = frame.height
         settings.cacheWindowSize(width: width, height: height)
+        settings.persistWindowSizeIfNeeded()
+
 
         if isInvertFixEnabled {
             return CGSize(width: height, height: width)
@@ -46,6 +51,7 @@ private var mainScreenSize: CGSize {
         return CGSize(width: storedWidth, height: storedHeight)
     }
 }
+
 
 private var mainScreenWidth: CGFloat { mainScreenSize.width }
 private var mainScreenHeight: CGFloat { mainScreenSize.height }
