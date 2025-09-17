@@ -6,53 +6,10 @@ import Foundation
 import UIKit
 
 let screen = PlayScreen.shared
-
-private var isInvertFixEnabled: Bool {
-
-    let settings = PlaySettings.shared
-    return settings.inverseScreenValues && settings.adaptiveDisplay
-}
-
-fileprivate var customScaler: Double {
-    PlaySettings.shared.customScaler
-}
-
-private var currentWindowFrame: CGRect? {
-    guard let frame = AKInterface.shared?.windowFrame, frame.width > 0, frame.height > 0 else {
-        return nil
-    }
-    return frame
-}
-
-private var mainScreenSize: CGSize {
-
-    let settings = PlaySettings.shared
-
-    if let frame = currentWindowFrame {
-        let width = frame.width
-        let height = frame.height
-        settings.cacheWindowSize(width: width, height: height)
-        settings.persistWindowSizeIfNeeded()
-
-        if isInvertFixEnabled {
-            return CGSize(width: height, height: width)
-        } else {
-            return CGSize(width: width, height: height)
-        }
-    }
-
-    let storedWidth = settings.windowSizeWidth
-    let storedHeight = settings.windowSizeHeight
-    if isInvertFixEnabled {
-        return CGSize(width: storedHeight, height: storedWidth)
-    } else {
-        return CGSize(width: storedWidth, height: storedHeight)
-    }
-}
-
-private var mainScreenWidth: CGFloat { mainScreenSize.width }
-private var mainScreenHeight: CGFloat { mainScreenSize.height }
-
+let isInvertFixEnabled = PlaySettings.shared.inverseScreenValues && PlaySettings.shared.adaptiveDisplay
+let mainScreenWidth =  !isInvertFixEnabled ? PlaySettings.shared.windowSizeWidth : PlaySettings.shared.windowSizeHeight
+let mainScreenHeight = !isInvertFixEnabled ? PlaySettings.shared.windowSizeHeight : PlaySettings.shared.windowSizeWidth
+let customScaler = PlaySettings.shared.customScaler
 
 extension CGSize {
     func aspectRatio() -> CGFloat {
