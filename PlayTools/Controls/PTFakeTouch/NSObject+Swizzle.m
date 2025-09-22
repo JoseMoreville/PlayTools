@@ -226,35 +226,10 @@ bool menuWasCreated = false;
                 [objc_getClass("UIDevice") swizzleInstanceMethod:@selector(orientation) withMethod:@selector(hook_orientation)];
                 [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(nativeBounds) withMethod:@selector(hook_nativeBounds)];
                 [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(nativeScale) withMethod:@selector(hook_nativeScale)];
-                [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(scale) withMethod:@selector(hook_scale)];   
-            }
-        }
-        else {
-            if ([[PlaySettings shared] windowFixMethod] == 1) {
-                // do nothing:tm:
-            }
-            else {
-                CGFloat newValueW = (CGFloat) [self get_default_width];
-                [[PlaySettings shared] setValue:@(newValueW) forKey:@"windowSizeWidth"];
-                
-                CGFloat newValueH = (CGFloat)[self get_default_height];
-                [[PlaySettings shared] setValue:@(newValueH) forKey:@"windowSizeHeight"];
-                if (![[PlaySettings shared] inverseScreenValues]) {
-                    if(@available(iOS 17.1, *))
-                        [objc_getClass("FBSSceneSettingsCore") swizzleExchangeMethod:@selector(frame) withMethod:@selector(hook_frameDefault)];
-                    else
-                        [objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(frame) withMethod:@selector(hook_frameDefault)];
-                    [objc_getClass("FBSSceneSettings") swizzleInstanceMethod:@selector(bounds) withMethod:@selector(hook_boundsDefault)];
-                    [objc_getClass("FBSDisplayMode") swizzleInstanceMethod:@selector(size) withMethod:@selector(hook_sizeDelfault)];
-                }
-                [objc_getClass("UIDevice") swizzleInstanceMethod:@selector(orientation) withMethod:@selector(hook_orientation)];
-                [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(nativeBounds) withMethod:@selector(hook_nativeBoundsDefault)];
-                
-                [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(nativeScale) withMethod:@selector(hook_nativeScale)];
                 [objc_getClass("UIScreen") swizzleInstanceMethod:@selector(scale) withMethod:@selector(hook_scale)];
             }
         }
-    } 
+    }
     else {
         if ([[PlaySettings shared] adaptiveDisplay]) {
                 if(@available(iOS 17.1, *))

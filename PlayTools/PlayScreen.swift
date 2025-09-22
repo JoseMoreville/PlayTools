@@ -11,6 +11,34 @@ let mainScreenWidth =  !isInvertFixEnabled ? PlaySettings.shared.windowSizeWidth
 let mainScreenHeight = !isInvertFixEnabled ? PlaySettings.shared.windowSizeHeight : PlaySettings.shared.windowSizeWidth
 let customScaler = PlaySettings.shared.customScaler
 
+private func resolvedAspectSize(target: CGSize, available: CGSize) -> CGSize {
+    let widthLimit = available.width > 0 ? available.width : .infinity
+    let heightLimit = available.height > 0 ? available.height : .infinity
+
+    let widthFits = target.width <= widthLimit
+    let heightFits = target.height <= heightLimit
+
+    if widthFits && heightFits {
+        return target
+    }
+
+    if !widthFits && !heightFits {
+        let widthScale = widthLimit / target.width
+        let heightScale = heightLimit / target.height
+        let scale = min(widthScale, heightScale)
+        return CGSize(width: target.width * scale, height: target.height * scale)
+    }
+
+    let width = widthFits ? target.width : widthLimit
+    let height = heightFits ? target.height : heightLimit
+    return CGSize(width: width, height: height)
+}
+
+private func resolvedAspectRect(_ rect: CGRect, target: CGSize) -> CGRect {
+    let resolvedSize = resolvedAspectSize(target: target, available: rect.size)
+    return CGRect(origin: rect.origin, size: resolvedSize)
+}
+
 extension CGSize {
     func aspectRatio() -> CGFloat {
         if mainScreenWidth > mainScreenHeight {
@@ -22,20 +50,25 @@ extension CGSize {
 
     func toAspectRatio() -> CGSize {
         if #available(iOS 16.3, *) {
-            return CGSize(width: mainScreenWidth, height: mainScreenHeight)
+            return resolvedAspectSize(target: CGSize(width: mainScreenWidth, height: mainScreenHeight),
+                                      available: self)
         } else {
-            return CGSize(width: mainScreenHeight, height: mainScreenWidth)
+            return resolvedAspectSize(target: CGSize(width: mainScreenHeight, height: mainScreenWidth),
+                                      available: self)
         }
     }
 
     func toAspectRatioInternal() -> CGSize {
-        return CGSize(width: mainScreenHeight, height: mainScreenWidth)
+        return resolvedAspectSize(target: CGSize(width: mainScreenHeight, height: mainScreenWidth),
+                                  available: self)
     }
     func toAspectRatioDefault() -> CGSize {
-        return CGSize(width: mainScreenHeight, height: mainScreenWidth)
+        return resolvedAspectSize(target: CGSize(width: mainScreenHeight, height: mainScreenWidth),
+                                  available: self)
     }
     func toAspectRatioInternalDefault() -> CGSize {
-        return CGSize(width: mainScreenWidth, height: mainScreenHeight)
+        return resolvedAspectSize(target: CGSize(width: mainScreenWidth, height: mainScreenHeight),
+                                  available: self)
     }
 }
 
@@ -49,17 +82,21 @@ extension CGRect {
     }
 
     func toAspectRatio(_ multiplier: CGFloat = 1) -> CGRect {
-        return CGRect(x: minX, y: minY, width: mainScreenWidth * multiplier, height: mainScreenHeight * multiplier)
+        let target = CGSize(width: mainScreenWidth * multiplier, height: mainScreenHeight * multiplier)
+        return resolvedAspectRect(self, target: target)
     }
 
     func toAspectRatioReversed() -> CGRect {
-        return CGRect(x: minX, y: minY, width: mainScreenHeight, height: mainScreenWidth)
+        let target = CGSize(width: mainScreenHeight, height: mainScreenWidth)
+        return resolvedAspectRect(self, target: target)
     }
     func toAspectRatioDefault(_ multiplier: CGFloat = 1) -> CGRect {
-        return CGRect(x: minX, y: minY, width: mainScreenWidth * multiplier, height: mainScreenHeight * multiplier)
+        let target = CGSize(width: mainScreenWidth * multiplier, height: mainScreenHeight * multiplier)
+        return resolvedAspectRect(self, target: target)
     }
     func toAspectRatioReversedDefault() -> CGRect {
-        return CGRect(x: minX, y: minY, width: mainScreenHeight, height: mainScreenWidth)
+        let target = CGSize(width: mainScreenHeight, height: mainScreenWidth)
+        return resolvedAspectRect(self, target: target)
     }
 }
 
